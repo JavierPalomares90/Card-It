@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="planets">
+        <item> Mercury</item>
+        <item>Venus</item>
+    </string-array>
 </resources>
