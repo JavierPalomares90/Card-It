@@ -29,6 +29,9 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private CharSequence mTitle;
     private Card myCard;
+    private Card[] cards;
+    private EditText name;
+    private ImageView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +39,16 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android));
 
-        EditText name = (EditText) findViewById(R.id.name);
+        name = (EditText) findViewById(R.id.name);
         name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
 
-        ImageView cardView = (ImageView) findViewById(R.id.imageView);
+        cardView = (ImageView) findViewById(R.id.imageView);
         cardView.setImageBitmap(myCard.getImg());
         mNavigationDrawerItemTitles = getResources().getStringArray(R.array.planets);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        Card[] cards = new Card[3];
+        cards = new Card[3];
         cards[0] = new Card("John","Doe",  Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
         cards[1] = new Card("Jane", "Doe", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
         cards[2] = new Card("James", "John", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
@@ -86,19 +89,14 @@ public class MainActivity extends Activity {
 
         private void selectItem(int position) {
 
-            Fragment fragment = new Fragment();
+            mDrawerList.setItemChecked(position, true);
+            mDrawerList.setSelection(position);
+            Card currCard = cards[position];
+            getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
+            mDrawerLayout.closeDrawer(mDrawerList);
+            name.setText(currCard.getFirstName() + " " + currCard.getLastName(), TextView.BufferType.EDITABLE);
+            cardView.setImageBitmap(currCard.getImg());
 
-            if (fragment != null) {
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-                mDrawerList.setItemChecked(position, true);
-                mDrawerList.setSelection(position);
-                getActionBar().setTitle(mNavigationDrawerItemTitles[position]);
-                mDrawerLayout.closeDrawer(mDrawerList);
-
-            } else {
-                Log.e("MainActivity", "Error in creating fragment");
-            }
         }
     }
 
