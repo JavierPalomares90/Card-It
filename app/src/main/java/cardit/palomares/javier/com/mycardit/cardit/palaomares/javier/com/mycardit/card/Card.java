@@ -9,6 +9,7 @@ public class Card extends Object {
     private String firstName;
     private String lastName;
     private Bitmap img;
+    private String imgFileName;
 
     public Card(String firstName,String lastName,Bitmap img){
         this.firstName = firstName;
@@ -41,5 +42,12 @@ public class Card extends Object {
         img = bitmap;
     }
 
+    public void setImgFileName(String str){
+        imgFileName = str;
+    }
+
+    public String getImgFileName(){
+        return imgFileName;
+    }
 
 }
