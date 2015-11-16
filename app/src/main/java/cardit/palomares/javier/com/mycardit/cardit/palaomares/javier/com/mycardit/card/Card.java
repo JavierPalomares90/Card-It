@@ -11,10 +11,11 @@ public class Card extends Object {
     private Bitmap img;
     private String imgFileName;
 
-    public Card(String firstName,String lastName,Bitmap img){
+    public Card(String firstName,String lastName,Bitmap img,String imgFileName){
         this.firstName = firstName;
         this.lastName = lastName;
         this.img = img;
+        this.imgFileName = imgFileName;
     }
 
     public String getFirstName(){

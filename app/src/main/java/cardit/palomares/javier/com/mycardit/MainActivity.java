@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
     private EditText name;
     private ImageView cardView;
     private Button snapCardButton;
+    private Button addContactButton;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
@@ -58,6 +59,13 @@ public class MainActivity extends Activity {
                  snapCard();
              }
          });
+
+        addContactButton = (Button) findViewById(R.id.add_contact_button);
+        addContactButton.setOnClickListener(new View.OnClickListener() {
+                                                public void onClick(View v) {
+                                                    addContact();
+                                                }
+                                            });
 
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android));
 
@@ -77,6 +85,12 @@ public class MainActivity extends Activity {
         CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new CardClickListener());
+    }
+    private static int ADD_CONTACT_REQUEST = 2;
+
+    private void addContact(){
+        Intent i = new Intent(MainActivity.this,AddContactActivity.class);
+        startActivityForResult(i,ADD_CONTACT_REQUEST);
     }
 
     private void snapCard(){
@@ -125,6 +139,8 @@ public class MainActivity extends Activity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else if(requestCode == ADD_CONTACT_REQUEST && resultCode == RESULT_OK){
+            // TODO:Save the card
         }
     }
 
