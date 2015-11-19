@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Set;
 
 import cardit.palomares.javier.com.mycardit.utils.BackupFileHandler;
+import cardit.palomares.javier.com.mycardit.utils.FileBackupUtil;
 import cardit.palomares.javier.com.mycardit.utils.FileDefinitionSource;
+import cardit.palomares.javier.com.mycardit.utils.FileUtils;
 import cardit.palomares.javier.com.mycardit.utils.XmlReader;
 import cardit.palomares.javier.com.mycardit.utils.XmlWriter;
 
@@ -87,6 +89,11 @@ public class CardDatabase {
         private Set<Card> cards;
 
         @Override
+        public String getDefaultFilename(){
+            return null;
+        }
+
+        @Override
         public void saveFile(File file)
         {
             XmlWriter out = null;
@@ -106,7 +113,7 @@ public class CardDatabase {
             for (Card card: cards)
             {
                 try {
-                    Element node = out.addNode(cardsNode,CARDS_NODE);
+                    Element node = out.addNode(cardsNode,CARD_NODE);
 
                     //save the firstNme
                     out.addNode(node,FIRST_NAME_NODE,card.getFirstName());
@@ -135,7 +142,7 @@ public class CardDatabase {
 
             cards = new HashSet<Card>();
 
-            FileDefinitionsource src = new FileDefinitionSource(file);
+            FileDefinitionSource src = new FileDefinitionSource(file);
             XmlReader reader = null;
 
             try

@@ -14,4 +14,6 @@ public interface BackupFileHandler {
     public boolean restoreDefaultFileFromMemory();
 
     public String getFileName();
+
+    public String getDefaultFilename();
 }
