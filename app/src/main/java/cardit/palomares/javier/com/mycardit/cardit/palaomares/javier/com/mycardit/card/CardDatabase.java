@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.BackupFileHandler;
+import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.FileDefinitionSource;
+import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.XmlReader;
 import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.XmlWriter;
 
 import org.w3c.dom.Element;
@@ -92,7 +94,7 @@ public class CardDatabase {
             {
                 out = new XmlWriter();
             }
-            catch
+            catch (Exception e)
             {
                 return;
             }

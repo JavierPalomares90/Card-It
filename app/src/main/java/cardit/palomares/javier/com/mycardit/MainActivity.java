@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.CardManager;
 
 public class MainActivity extends Activity {
 
@@ -48,6 +49,7 @@ public class MainActivity extends Activity {
     private static String TAG = "MyCardIt";
     private static int THUMBNAIL_WIDTH = 750;
     private static int THUMBNAIL_HEIGHT = 500;
+    private static String cardsFilePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class MainActivity extends Activity {
                                                 }
                                             });
 
-        myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android));
+        myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
 
         name = (EditText) findViewById(R.id.name);
         name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
@@ -78,9 +80,9 @@ public class MainActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         cards = new Card[3];
-        cards[0] = new Card("John","Doe",  Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
-        cards[1] = new Card("Jane", "Doe", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
-        cards[2] = new Card("James", "John", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888));
+        cards[0] = new Card("John","Doe",  Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
+        cards[1] = new Card("Jane", "Doe", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
+        cards[2] = new Card("James", "John", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
 
         CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
         mDrawerList.setAdapter(adapter);
@@ -140,7 +142,25 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             }
         }else if(requestCode == ADD_CONTACT_REQUEST && resultCode == RESULT_OK){
-            // TODO:Save the card
+            String firstName;
+            String lastName;
+            String cardImgPath;
+            Bitmap thumbnail;
+            Bundle extras = getIntent().getExtras();
+            if (extras == null){
+                firstName = null;
+                lastName = null;
+                cardImgPath = null;
+                thumbnail = null;
+            }
+            firstName = extras.getString("firstName");
+            lastName = extras.getString("lastName");
+            cardImgPath = extras.getString("photoPath");
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
+            Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
+            CardManager.getInstance().addCard(newCard);
         }
     }
 
