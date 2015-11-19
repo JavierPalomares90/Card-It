@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.Card;
 
 /**
  * Created by javierpalomares on 11/1/15.

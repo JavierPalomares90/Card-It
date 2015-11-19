@@ -1,4 +1,4 @@
-package cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils;
+package cardit.palomares.javier.com.mycardit.utils;
 
 import java.io.IOException;
 import java.io.InputStream;

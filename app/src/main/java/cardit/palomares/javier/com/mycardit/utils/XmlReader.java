@@ -1,4 +1,4 @@
-package cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils;
+package cardit.palomares.javier.com.mycardit.utils;
 
 /**
  * Created by javierpalomares on 11/7/15.
@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

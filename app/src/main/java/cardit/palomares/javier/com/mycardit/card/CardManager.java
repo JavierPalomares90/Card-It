@@ -1,4 +1,4 @@
-package cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card;
+package cardit.palomares.javier.com.mycardit.card;
 
 /**
  * Created by javierpalomares on 11/1/15.

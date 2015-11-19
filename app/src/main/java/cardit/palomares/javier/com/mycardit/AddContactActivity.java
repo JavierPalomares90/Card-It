@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.Card;
 
 public class AddContactActivity extends Activity {
 

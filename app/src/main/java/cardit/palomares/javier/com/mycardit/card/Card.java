@@ -1,4 +1,4 @@
-package cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card;
+package cardit.palomares.javier.com.mycardit.card;
 
 import android.graphics.Bitmap;
 

@@ -1,12 +1,9 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,8 +26,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.Card;
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.CardManager;
+import cardit.palomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.CardManager;
 
 public class MainActivity extends Activity {
 

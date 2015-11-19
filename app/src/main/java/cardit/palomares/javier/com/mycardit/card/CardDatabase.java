@@ -1,4 +1,4 @@
-package cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card;
+package cardit.palomares.javier.com.mycardit.card;
 
 
 
@@ -10,10 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.BackupFileHandler;
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.FileDefinitionSource;
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.XmlReader;
-import cardit.palomares.javier.com.mycardit.cardit.palaomares.javier.com.mycardit.card.cardit.palomares.javier.com.mycardit.utils.XmlWriter;
+import cardit.palomares.javier.com.mycardit.utils.BackupFileHandler;
+import cardit.palomares.javier.com.mycardit.utils.FileDefinitionSource;
+import cardit.palomares.javier.com.mycardit.utils.XmlReader;
+import cardit.palomares.javier.com.mycardit.utils.XmlWriter;
 
 import org.w3c.dom.Element;
 import java.lang.Long;
