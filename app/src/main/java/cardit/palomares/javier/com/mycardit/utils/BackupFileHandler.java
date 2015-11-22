@@ -16,4 +16,6 @@ public interface BackupFileHandler {
     public String getFileName();
 
     public String getDefaultFilename();
+
+    public int getMinConfigLength();
 }
