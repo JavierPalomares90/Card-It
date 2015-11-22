@@ -156,7 +156,7 @@ public class MainActivity extends Activity {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
-            CardManager.getInstance().addCard(newCard);
+            CardManager.getInstance(this).addCard(newCard);
         }
     }
 
