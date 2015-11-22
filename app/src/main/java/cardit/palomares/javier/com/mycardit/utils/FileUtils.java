@@ -56,7 +56,7 @@ public class FileUtils {
     public static byte[] readRawContents(File file) throws IOException{
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         if (file.isFile() == true && file.canRead() == true){
-            FileUtils.copyandClose(new FileInputStream(file),output);
+            FileUtils.copyAndClose(new FileInputStream(file),output);
 
         }
         return output.toByteArray();
@@ -192,8 +192,16 @@ public class FileUtils {
     public static void copyFile(File src, File dst) throws IOException{
         FileInputStream fis = new FileInputStream(src);
         FileOutputStream fos = new FileOutputStream(dst);
-        copyandClose(fis,fos);
+        copyAndClose(fis,fos);
     }
+
+    public static byte[] createChecksum(File file) throws IOException{
+        if (file != null && file.canRead()){
+            return createChecksum(new FileInputStream(file));
+        }
+        return null;
+    }
+
 
     public static byte[] createChecksum(InputStream stream) throws IOException{
         try{

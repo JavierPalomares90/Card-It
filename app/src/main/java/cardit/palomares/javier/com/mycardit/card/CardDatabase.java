@@ -94,7 +94,9 @@ public class CardDatabase {
         }
 
         @Override
-        
+        public int getMinConfigLength(){
+            return 0;
+        }
         @Override
         public void saveFile(File file)
         {
@@ -264,7 +266,7 @@ public class CardDatabase {
                 BitmapFactory.Options option = new BitmapFactory.Options();
                 option.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 img =  BitmapFactory.decodeFile(filePath);
-                card = new Card(firstName,lastName,img);
+                card = new Card(firstName,lastName,img,filePath);
             }
             if( card != null)
             {

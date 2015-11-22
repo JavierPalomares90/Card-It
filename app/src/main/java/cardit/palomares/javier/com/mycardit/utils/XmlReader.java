@@ -160,6 +160,7 @@ public class XmlReader {
         return (Element) ptr;
     }
 
+
     public Element prevNode(Element node)
     {
         Node ptr = node;
@@ -171,6 +172,47 @@ public class XmlReader {
             }
         }while (ptr != null && ptr.getNodeType() != Node.ELEMENT_NODE);
         return (Element)ptr;
+    }
+
+    public long getNodeContentsLong(Element node, long defValue){
+        if (node != null){
+            String text = getNodeContents(node);
+            if (text != null){
+                try{
+                    String hexCheck = text.substring(0,2);
+                    if (hexCheck.equals("0x")){
+                        return Long.parseLong(text.substring(2),16);
+                    }
+                    else{
+                        return Long.parseLong(text);
+                    }
+                }catch (NumberFormatException ex){}
+                catch (StringIndexOutOfBoundsException ex){
+                    try{
+                        return Long.parseLong(text);
+                    }catch (NumberFormatException ex2){
+                        return defValue;
+                    }
+                }
+            }
+        }
+        return defValue;
+    }
+
+    public String getNodeContents(Element node){
+        if (node != null){
+            String text = node.getTextContent();
+            if (text != null){
+                return text.trim();
+            }
+        }
+        return null;
+    }
+
+    public String getNodeContents(Element node, boolean needDecrypted){
+        String contents = getNodeContents(node);
+        needDecrypted = false;
+        return contents;
     }
 
     public Element getChildNode(Element parent, String name)
