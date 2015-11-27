@@ -32,6 +32,8 @@ import java.util.Date;
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
 
+
+//TODO: mImageBitmap reset on device rotation
 public class MainActivity extends Activity {
 
     private DrawerLayout mDrawerLayout;
@@ -155,31 +157,38 @@ public class MainActivity extends Activity {
             return;
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Log.d(TAG,"Got a requestCode REQUEST_IMAGE_CAPTURE");
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                cardView.setImageBitmap(imageBitmap);
-                String savePath = savePhoto(imageBitmap);
-                Log.d(TAG,"photo saved to: " + savePath);
+            Log.d(TAG,"Got a requestCode REQUEST_IMAGE_CAPTURE");
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            cardView.setImageBitmap(imageBitmap);
+            String savePath = savePhoto(imageBitmap);
+            Log.d(TAG,"photo saved to: " + savePath);
         }else if(requestCode == ADD_CONTACT_REQUEST && resultCode == RESULT_OK){
+            Log.d(TAG,"Got a requestCode ADD_CONTACT_REQUEST");
             String firstName;
             String lastName;
             String cardImgPath;
             Bitmap thumbnail;
             Bundle extras = getIntent().getExtras();
             if (extras == null){
+                Log.d(TAG,"Extras are null. Exiting");
                 firstName = null;
                 lastName = null;
                 cardImgPath = null;
                 thumbnail = null;
+                return;
             }
             firstName = extras.getString("firstName");
+            Log.d(TAG,"first Name: " + firstName);
             lastName = extras.getString("lastName");
+            Log.d(TAG,"last name: " + lastName);
             cardImgPath = extras.getString("photoPath");
+            Log.d(TAG,"photoPath: " + cardImgPath);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
+            Log.d(TAG,"2");
             CardManager.getInstance(this).addCard(newCard);
         }
     }

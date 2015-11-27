@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -133,11 +134,12 @@ public class AddContactActivity extends Activity {
         @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Log.d(TAG,"Got a requestCode REQUEST_IMAGE_CAPTURE");
+            Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             cardView.setImageBitmap(imageBitmap);
             String savePath = savePhoto(imageBitmap);
+            mImageBitmap = imageBitmap;
             Log.d(TAG,"photo saved to: " + savePath);
         }
     }
@@ -163,22 +165,28 @@ public class AddContactActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        mCurrentPhotoPath = photoFile.getAbsolutePath();
         return photoFile.getAbsolutePath();
     }
 
     private void addNewContact(){
+        Log.d(TAG,"In add New Contact");
         if (mImageBitmap != null && firstNameString != null && lastNameString != null && mCurrentPhotoPath!= null)
         {
             myCard = new Card(firstNameString,lastNameString,mImageBitmap,mCurrentPhotoPath);
-
+            Log.d(TAG, "Made new card");
             Intent returnIntent = new Intent();
             returnIntent.putExtra("firstName",firstNameString);
             returnIntent.putExtra("lastName",lastNameString);
             returnIntent.putExtra("photoPath", mCurrentPhotoPath);
-            setResult(Activity.RESULT_OK,returnIntent);
+            setResult(Activity.RESULT_OK, returnIntent);
+            Log.d(TAG, "Exiting add new Contact activity");
             finish();
+
         }else{
-            //TODO: Sent toast stating fields are missing
+            String text = "Fields are missing";
+            Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
+            toast.show();
         }
     }
 }
