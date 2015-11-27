@@ -162,7 +162,6 @@ public class MainActivity extends Activity {
                 String savePath = savePhoto(imageBitmap);
                 Log.d(TAG,"photo saved to: " + savePath);
         }else if(requestCode == ADD_CONTACT_REQUEST && resultCode == RESULT_OK){
-            Log.d(TAG,"got here");
             String firstName;
             String lastName;
             String cardImgPath;
@@ -183,7 +182,6 @@ public class MainActivity extends Activity {
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
         }
-        Log.d(TAG,"Got there");
     }
 
     @Override
