@@ -1,5 +1,7 @@
 package cardit.palomares.javier.com.mycardit.utils;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -9,6 +11,7 @@ import java.io.IOException;
 public class FileBackupUtil {
     public static final String BACKUP_SUFFIX = ".bak";
     public static final String TEMP_FILE_SUFFIX = ".tmp";
+    private static final String TAG = "FileBackupUtil";
     public static final boolean safeLoadFile(BackupFileHandler backupFileHandler){
         synchronized (backupFileHandler){
             boolean success = true;
@@ -53,12 +56,9 @@ public class FileBackupUtil {
 
         if (newBackupNeeded){
             try{
-
                 FileUtils.copyFile(configFile, bakFile);
-
-
             }catch(IOException e){
-                //TODO: Log error to logcat
+                Log.d(TAG,"error in copying file when creating");
             }
         }
     }
@@ -85,18 +85,16 @@ public class FileBackupUtil {
                     if(verifyValidFormat(file)){
                         boolean bakCreateResult = file.renameTo(bakFile);
                         if (!bakCreateResult){
-                            //TODO: log error unable to create bak file
+                            Log.d(TAG,"Unable to create backup file");
                         }
                     }else{
-                        // TODO: log unable to open file
+                        Log.d(TAG,"Error in wrirting file");
                     }
                 }else{
                     try{
-
                         FileUtils.copyFile(tmpFile, bakFile);
-
                     }catch (IOException e){
-                        //TODO: log unable to save bakFile
+                        Log.d(TAG,"Unable to write backup file");
                     }
                 }
 
@@ -104,7 +102,7 @@ public class FileBackupUtil {
                 boolean createResult = tmpFile.renameTo(configFile);
 
                 if(!createResult){
-                    // TODO: Log unable to save config file
+                    Log.d(TAG,"Unable to save config file");
                 }
             }
         }
@@ -120,7 +118,7 @@ public class FileBackupUtil {
             reader = new XmlReader(src);
             success = true;
         }catch(Exception e){
-            //TODO: LOG errors
+            Log.d(TAG,"Error in verifying format");
         }finally{
             FileUtils.closeAndIgnoreFail(src);
             FileUtils.closeAndIgnoreFail(reader);
@@ -133,11 +131,14 @@ public class FileBackupUtil {
         if(!filename.isEmpty()){
             File file = new File(filename);
             try{
-                if (file.exists() && file.length() > 0 && backupFileHandler.readFile(file)){
+                boolean fileExists = file.exists();
+                long len = file.length();
+                boolean readFile = backupFileHandler.readFile(file);
+                if (fileExists &&  len > 0 && readFile){
                     success = true;
                 }
             }catch(NullPointerException e){
-                //TODO: log exception
+                Log.d(TAG,"Unable to load file");
             }
 
         }
