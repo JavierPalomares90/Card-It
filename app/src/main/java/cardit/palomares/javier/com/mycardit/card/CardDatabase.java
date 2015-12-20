@@ -36,6 +36,7 @@ public class CardDatabase {
     private static final String MY_FIRST_NAME_NODE = "myFirstName";
     private static final String MY_LAST_NAME_NODE = "myLastName";
     private static final String MY_IMG_FILE_NAME_NODE = "myImgFileName";
+    private static final String DEFAULT_FILE_NAME = "/data/user/0/cardit.palomares.javier.com.my.cardit/files/cards.config";
 
     private static String filename;
 
@@ -96,7 +97,7 @@ public class CardDatabase {
 
         @Override
         public String getDefaultFilename(){
-            return null;
+            return DEFAULT_FILE_NAME;
         }
 
         @Override

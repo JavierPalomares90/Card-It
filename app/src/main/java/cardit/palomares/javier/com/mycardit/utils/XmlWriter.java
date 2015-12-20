@@ -1,5 +1,7 @@
 package cardit.palomares.javier.com.mycardit.utils;
 
+import android.util.Log;
+
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,6 +43,7 @@ public class XmlWriter {
 
     private static Transformer prettyTransformer = null;
     private static Transformer regularTransformer = null;
+    private static String TAG = "XmlWriter";
 
     static {
         Thread load = new Thread(new LoaderThread());
@@ -137,7 +140,7 @@ public class XmlWriter {
                 if (alreadyExists == true){
                     throw(e);
                 }else{
-                    //TODO: Log error to logcat
+                    Log.d(TAG,"Unable to save Doc");
                 }
             }
 
@@ -205,7 +208,7 @@ public class XmlWriter {
                 return regularTransformer;
             }
         }catch (TransformerConfigurationException e){
-            //TODO: Log exception to logcat
+            Log.d(TAG,"Uanble to get Transformer");
             return  null;
         }catch (RuntimeException e){
             throw new IOException(e);

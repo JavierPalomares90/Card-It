@@ -133,9 +133,9 @@ public class FileBackupUtil {
             try{
                 boolean fileExists = file.exists();
                 long len = file.length();
-                boolean readFile = backupFileHandler.readFile(file);
-                if (fileExists &&  len > 0 && readFile){
-                    success = true;
+                if (fileExists &&  len > 0 ){
+                    boolean readFile = backupFileHandler.readFile(file);
+                    success = readFile;
                 }
             }catch(NullPointerException e){
                 Log.d(TAG,"Unable to load file");
