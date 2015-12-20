@@ -169,26 +169,19 @@ public class MainActivity extends Activity {
             String lastName;
             String cardImgPath;
             Bitmap thumbnail;
-            Bundle extras = getIntent().getExtras();
+            Bundle extras = data.getExtras();
             if (extras == null){
                 Log.d(TAG,"Extras are null. Exiting");
-                firstName = null;
-                lastName = null;
-                cardImgPath = null;
-                thumbnail = null;
                 return;
             }
             firstName = extras.getString("firstName");
-            Log.d(TAG,"first Name: " + firstName);
+
             lastName = extras.getString("lastName");
-            Log.d(TAG,"last name: " + lastName);
             cardImgPath = extras.getString("photoPath");
-            Log.d(TAG,"photoPath: " + cardImgPath);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
-            Log.d(TAG,"2");
             CardManager.getInstance(this).addCard(newCard);
         }
     }
