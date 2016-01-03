@@ -58,6 +58,7 @@ public class CardDatabase {
         return instance;
     }
 
+    
     /**
      * Open the databse file and parse its contents
      */
@@ -246,6 +247,11 @@ public class CardDatabase {
                     }
                 }
             }
+            return true;
+        }
+
+        public boolean setMyCard(Card toSet){
+            myCard = toSet;
             return true;
         }
 

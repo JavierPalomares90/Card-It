@@ -20,6 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -197,10 +198,14 @@ public class XmlWriter {
             TransformerFactory factory = TransformerFactory.newInstance();
             if (pretty) {
                 StreamSource style = new StreamSource(new StringReader(stylesheet));
-                prettyTransformer = factory.newTransformer(style);
+                Templates temp = factory.newTemplates(style);
+                prettyTransformer = factory.newTransformer(style); // This is returning null
+                regularTransformer = factory.newTransformer();
                 if (prettyTransformer != null) {
                     prettyTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
                     prettyTransformer.setOutputProperty(OutputKeys.METHOD, "xml");
+                }else if (regularTransformer != null){
+                    return regularTransformer;
                 }
                 return prettyTransformer;
             } else {
@@ -216,8 +221,9 @@ public class XmlWriter {
     }
 
     private static final String stylesheet = "<!DOCTYPE stylesheet [\r\n" +
-                                             " <!ENTITY cr \" <xsl:text>\r\n" +
+                                             " <!ENTITY cr \"<xsl:text>\r\n" +
                                              "</xsl:text>\">\r\n" +
+                                             "]>\r\n" +
                                              "<xsl:stylesheet\r\n" +
                                              "   xmlns:xsl=\"http://www.w3.org/1999/XSL/Tranform\" \r\n" +
                                              "   xmlns:xalan=\"http://xml.apache.org/xslt\" \r\n" +

@@ -30,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.CardDatabase;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
 
 
@@ -72,7 +73,7 @@ public class MainActivity extends Activity {
                                             });
 
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
-
+        CardDatabase.
         name = (EditText) findViewById(R.id.name);
         name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
 
