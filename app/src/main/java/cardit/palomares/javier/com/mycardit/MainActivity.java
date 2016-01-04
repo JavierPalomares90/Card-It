@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
                                             });
 
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
-        CardDatabase.
+        setMyCard(myCard);
         name = (EditText) findViewById(R.id.name);
         name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
 
@@ -92,6 +92,9 @@ public class MainActivity extends Activity {
         mDrawerList.setOnItemClickListener(new CardClickListener());
     }
 
+    private void setMyCard(Card card){
+        CardManager.getInstance(this).setMyCard(card);
+    }
 
     private void addContact(){
         Log.d(TAG,"In add Contact");

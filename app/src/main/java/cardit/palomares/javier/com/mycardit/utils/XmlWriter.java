@@ -213,7 +213,8 @@ public class XmlWriter {
                 return regularTransformer;
             }
         }catch (TransformerConfigurationException e){
-            Log.d(TAG,"Uanble to get Transformer");
+            String err = e.getMessage();
+            Log.d(TAG,"Unable to get Transformer: " + e.getMessage());
             return  null;
         }catch (RuntimeException e){
             throw new IOException(e);

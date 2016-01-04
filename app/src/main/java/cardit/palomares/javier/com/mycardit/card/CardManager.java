@@ -32,7 +32,8 @@ public class CardManager {
         return null;
     }
 
-    public boolean setMyCard(){
+    public boolean setMyCard(Card card){
+        CardDatabase.getInstance(context).setMyCard(card);
         return false;
     }
 

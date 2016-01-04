@@ -42,6 +42,7 @@ public class CardDatabase {
 
     private long version = 0;
     private static volatile CardDatabase instance;
+    private static Card myCard;
     public CardDatabase(){
 
     }
@@ -53,12 +54,13 @@ public class CardDatabase {
             {
                 instance = new CardDatabase();
                 filename = c.getFilesDir().getAbsoluteFile() + "/cards.config";
+                myCard = null;
             }
         }
         return instance;
     }
 
-    
+
     /**
      * Open the databse file and parse its contents
      */
@@ -76,6 +78,11 @@ public class CardDatabase {
         saveCards(persistedCards);
     }
 
+    public synchronized  void setMyCard(Card card)
+    {
+        myCard = card;
+    }
+
     public synchronized void removeCard(Card card)
     {
         Set<Card> persistedCards = load();
@@ -88,6 +95,7 @@ public class CardDatabase {
         //inititate peristance to xml file
         CardDatabaseConfigHandler backupFileHandler = new CardDatabaseConfigHandler();
         backupFileHandler.cards = cards;
+        backupFileHandler.myCard = myCard;
         FileBackupUtil.safeWriteFile(backupFileHandler);
     }
 
