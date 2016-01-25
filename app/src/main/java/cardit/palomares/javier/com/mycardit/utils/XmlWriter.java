@@ -199,9 +199,9 @@ public class XmlWriter {
             if (pretty) {
                 StreamSource style = new StreamSource(new StringReader(stylesheet));
                 Templates temp = factory.newTemplates(style);
-                prettyTransformer = factory.newTransformer(style); // This is returning null
-                regularTransformer = factory.newTransformer();
+                prettyTransformer = temp.newTransformer(); // This is returning null
                 if (prettyTransformer != null) {
+                    prettyTransformer = temp.newTransformer();
                     prettyTransformer.setOutputProperty(OutputKeys.INDENT, "yes");
                     prettyTransformer.setOutputProperty(OutputKeys.METHOD, "xml");
                 }else if (regularTransformer != null){
@@ -214,9 +214,10 @@ public class XmlWriter {
             }
         }catch (TransformerConfigurationException e){
             String err = e.getMessage();
-            Log.d(TAG,"Unable to get Transformer: " + e.getMessage());
+            Log.e(TAG, e.getMessage());
             return  null;
         }catch (RuntimeException e){
+            Log.e(TAG, e.getMessage());
             throw new IOException(e);
         }
     }
