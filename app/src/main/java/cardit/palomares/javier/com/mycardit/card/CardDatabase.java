@@ -92,6 +92,7 @@ public class CardDatabase {
 
     private synchronized void saveCards(Set<Card> cards)
     {
+        // save using sql lite
         //inititate peristance to xml file
         CardDatabaseConfigHandler backupFileHandler = new CardDatabaseConfigHandler();
         backupFileHandler.cards = cards;
