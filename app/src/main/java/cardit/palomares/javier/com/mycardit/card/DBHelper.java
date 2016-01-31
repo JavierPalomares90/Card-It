@@ -1,5 +1,6 @@
 package cardit.palomares.javier.com.mycardit.card;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -93,7 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("contacts", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
         return true;
     }
-
+    /**TODO: Need to think about best way to implement this **/
     public Integer deleteCard(Card card)
     {
         int id = card.getId();
@@ -103,17 +104,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] { Integer.toString(id) });
     }
 
-    public Integer deleteContact (Integer id)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("contacts",
-                "id = ? ",
-                new String[] { Integer.toString(id) });
-    }
 
     public ArrayList<Card> getAllCards()
     {
-        ArrayList<String> array_list = new ArrayList<String>();
+        ArrayList<Card> cards = new ArrayList<Card>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -122,26 +116,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         while (!res.isAfterLast())
         {
-            array_list.add(res.getString(res.getColumnIndex(CARDS_COLUMN_FIRST_NAME)));
+            String firstName = res.getString(res.getColumnIndex(CARDS_COLUMN_FIRST_NAME));
+            String lastName = res.getString(res.getColumnIndex(CARDS_COLUMN_LAST_NAME));
+            String filePath = res.getString(res.getColumnIndex(CARDS_COLUMN_IMG_FILE_NAME));
+            Card card = new Card(firstName,lastName,null,filePath);
+            cards.add(card);
             res.moveToNext();
         }
-        return array_list;
+        return cards;
 
-    }
-
-    public ArrayList<String> getAllCotacts()
-    {
-        ArrayList<String> array_list = new ArrayList<String>();
-
-        //hp = new HashMap();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts", null );
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(CARDS_COLUMN_NAME)));
-            res.moveToNext();
-        }
-        return array_list;
     }
 }

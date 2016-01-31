@@ -2,11 +2,14 @@ package cardit.palomares.javier.com.mycardit.card;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 /**
  * Created by javierpalomares on 11/1/15.
  */
 public class CardManager {
     private static Context context;
+    private static DBHelper mydb;
 
     private static CardManager instance = null;
 
@@ -14,17 +17,18 @@ public class CardManager {
         if(instance == null){
             context = c;
             instance = new CardManager();
+            mydb = new DBHelper(c);
         }
         return instance;
     }
 
     public boolean addCard(Card toAdd){
-        CardDatabase.getInstance(context).addCard(toAdd);
+        mydb.insertCard(toAdd);
         return true;
     }
 
     public boolean deleteCard(Card toDelete){
-        CardDatabase.getInstance(context).removeCard(toDelete);
+        mydb.deleteCard(toDelete);
         return true;
     }
 
@@ -37,7 +41,9 @@ public class CardManager {
         return false;
     }
 
-    public Card[] getAllCards(){
-        return null;
+    public ArrayList<Card> getAllCards()
+    {
+        ArrayList<Card> allCards = mydb.getAllCards();
+        return allCards;
     }
 }
