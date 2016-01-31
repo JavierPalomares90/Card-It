@@ -10,14 +10,19 @@ public class Card extends Object {
     private String lastName;
     private Bitmap img;
     private String imgFileName;
+    private int id;
 
     public Card(String firstName,String lastName,Bitmap img,String imgFileName){
         this.firstName = firstName;
         this.lastName = lastName;
         this.img = img;
         this.imgFileName = imgFileName;
+        this.id = 0; /**TODO: Need to find a way to set the id **/
     }
-
+    public int getId()
+    {
+        return id;
+    }
     public String getFirstName(){
         return firstName;
     }

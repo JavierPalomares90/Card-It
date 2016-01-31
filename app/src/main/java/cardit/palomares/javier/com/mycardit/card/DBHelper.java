@@ -17,10 +17,10 @@ import android.database.sqlite.SQLiteDatabase;
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "MyCardsDB.db";
-    public static final String CONTACTS_TABLE_NAME = "cards";
+    public static final String CARDS_TABLE_NAME = "cards";
     public static final String CARDS_COLUMN_ID = "id";
     public static final String CARDS_COLUMN_FIRST_NAME = "firstName";
-    public static final String CARDS_COLUMN_LAST_NAMe = "lastName";
+    public static final String CARDS_COLUMN_LAST_NAME = "lastName";
     public static final String CARDS_COLUMN_IMG_FILE_NAME = "imgFileName";
     private HashMap hp;
 
@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table contacts " +
-                        "(id integer primary key, name text,phone text,email text, street text,place text)"
+                        "(id integer primary key, firstName text,lastNmae text,imgFileName text)"
         );
     }
 
@@ -45,7 +45,18 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertContact  (String name, String phone, String email, String street,String place)
+    public boolean insertCard(Card card)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CARDS_COLUMN_FIRST_NAME,card.getFirstName());
+        contentValues.put(CARDS_COLUMN_LAST_NAME,card.getLastName());
+        contentValues.put(CARDS_COLUMN_IMG_FILE_NAME, card.getImgFileName());
+        db.insert(DATABASE_NAME, null, contentValues);
+        return true;
+    }
+
+    public boolean insertContact (String name, String phone, String email, String street,String place)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -66,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
-        int numRows = (int) DatabaseUtils.queryNumEntries(db, CONTACTS_TABLE_NAME);
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, CARDS_TABLE_NAME);
         return numRows;
     }
 
@@ -83,12 +94,39 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public Integer deleteCard(Card card)
+    {
+        int id = card.getId();
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(DATABASE_NAME,
+                "id = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
     public Integer deleteContact (Integer id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("contacts",
                 "id = ? ",
                 new String[] { Integer.toString(id) });
+    }
+
+    public ArrayList<Card> getAllCards()
+    {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from cards", null );
+        res.moveToFirst();
+
+        while (!res.isAfterLast())
+        {
+            array_list.add(res.getString(res.getColumnIndex(CARDS_COLUMN_FIRST_NAME)));
+            res.moveToNext();
+        }
+        return array_list;
+
     }
 
     public ArrayList<String> getAllCotacts()
@@ -101,7 +139,7 @@ public class DBHelper extends SQLiteOpenHelper {
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+            array_list.add(res.getString(res.getColumnIndex(CARDS_COLUMN_NAME)));
             res.moveToNext();
         }
         return array_list;
