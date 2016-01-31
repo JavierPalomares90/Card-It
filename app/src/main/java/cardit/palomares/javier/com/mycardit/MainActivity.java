@@ -26,8 +26,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardDatabase;
@@ -51,7 +53,7 @@ public class MainActivity extends Activity {
     private static String TAG = "MyCardIt";
     private static int THUMBNAIL_WIDTH = 750;
     private static int THUMBNAIL_HEIGHT = 500;
-    private static String cardsFilePath;
+    private static String cardsFilePath = "myCardImg.png";
     private static int ADD_CONTACT_REQUEST = 2;
 
     @Override
@@ -74,6 +76,7 @@ public class MainActivity extends Activity {
 
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
         setMyCard(myCard);
+        CardManager.getInstance(this).addCard(myCard);
         name = (EditText) findViewById(R.id.name);
         name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
 
@@ -82,14 +85,13 @@ public class MainActivity extends Activity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        cards = new Card[3];
-        cards[0] = new Card("John","Doe",  Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
-        cards[1] = new Card("Jane", "Doe", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
-        cards[2] = new Card("James", "John", Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),cardsFilePath);
+        ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
+        cards = allCards.toArray(new Card[allCards.size()]);
 
         CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new CardClickListener());
+
     }
 
     private void setMyCard(Card card){

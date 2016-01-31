@@ -27,15 +27,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context)
     {
-        super(context, DATABASE_NAME , null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
         db.execSQL(
-                "create table contacts " +
-                        "(id integer primary key, firstName text,lastNmae text,imgFileName text)"
+                "create table cards " +
+                        "(id integer primary key, firstName text,lastName text,imgFileName text)"
         );
     }
 
@@ -53,22 +53,10 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(CARDS_COLUMN_FIRST_NAME,card.getFirstName());
         contentValues.put(CARDS_COLUMN_LAST_NAME,card.getLastName());
         contentValues.put(CARDS_COLUMN_IMG_FILE_NAME, card.getImgFileName());
-        db.insert(DATABASE_NAME, null, contentValues);
+        db.insert(CARDS_TABLE_NAME, null, contentValues);
         return true;
     }
 
-    public boolean insertContact (String name, String phone, String email, String street,String place)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("phone", phone);
-        contentValues.put("email", email);
-        contentValues.put("street", street);
-        contentValues.put("place", place);
-        db.insert("contacts", null, contentValues);
-        return true;
-    }
 
     public Cursor getData(int id){
         SQLiteDatabase db = this.getReadableDatabase();
