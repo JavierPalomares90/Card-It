@@ -189,6 +189,11 @@ public class MainActivity extends Activity {
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
+
+            ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
+            cards = allCards.toArray(new Card[allCards.size()]);
+            CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
+            mDrawerList.setAdapter(adapter);
         }
     }
 
