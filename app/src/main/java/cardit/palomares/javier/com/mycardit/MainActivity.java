@@ -84,12 +84,7 @@ public class MainActivity extends Activity {
         cardView.setImageBitmap(myCard.getImg());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
-        cards = allCards.toArray(new Card[allCards.size()]);
-
-        CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
-        mDrawerList.setAdapter(adapter);
+        updateDrawer();
         mDrawerList.setOnItemClickListener(new CardClickListener());
 
     }
@@ -101,7 +96,7 @@ public class MainActivity extends Activity {
     private void addContact(){
         Log.d(TAG,"In add Contact");
         Intent i = new Intent(MainActivity.this,AddContactActivity.class);
-        startActivityForResult(i,ADD_CONTACT_REQUEST);
+        startActivityForResult(i, ADD_CONTACT_REQUEST);
     }
 
     private void snapCard(){
@@ -156,6 +151,15 @@ public class MainActivity extends Activity {
         return photoFile.getAbsolutePath();
     }
 
+    private void updateDrawer()
+    {
+        ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
+        cards = allCards.toArray(new Card[allCards.size()]);
+        CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
+        mDrawerList.setAdapter(adapter);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_CANCELED){
@@ -189,11 +193,7 @@ public class MainActivity extends Activity {
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
-
-            ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
-            cards = allCards.toArray(new Card[allCards.size()]);
-            CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
-            mDrawerList.setAdapter(adapter);
+            updateDrawer();
         }
     }
 
