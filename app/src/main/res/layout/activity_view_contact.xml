@@ -16,13 +16,13 @@
         android:ems="10"
         android:clickable="false"
         android:cursorVisible="false"
-        android:id="@+id/name"
+        android:id="@+id/view_name"
         android:layout_gravity="center_horizontal|top" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:id="@+id/view_card_image"
         android:layout_gravity="center" />
 
 </RelativeLayout>

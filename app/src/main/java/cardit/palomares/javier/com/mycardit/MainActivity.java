@@ -235,7 +235,6 @@ public class MainActivity extends Activity {
             mDrawerLayout.closeDrawer(mDrawerList);
             name.setText(currCard.getFirstName() + " " + currCard.getLastName(), TextView.BufferType.EDITABLE);
             cardView.setImageBitmap(currCard.getImg());
-
         }
     }
 
