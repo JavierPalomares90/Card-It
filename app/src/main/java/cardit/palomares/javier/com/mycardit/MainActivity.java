@@ -1,6 +1,8 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.app.Activity;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -34,7 +37,6 @@ import java.util.ArrayList;
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardDatabase;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
-
 
 //TODO: mImageBitmap reset on device rotation
 public class MainActivity extends Activity {
@@ -223,7 +225,21 @@ public class MainActivity extends Activity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
+            //selectItem(position);
+            Card currCard = cards[position];
+            viewContactCard(currCard);
+        }
+
+        private void viewContactCard(Card card)
+        {
+            Intent i = new Intent(MainActivity.this,ViewContactActivity.class);
+            String firstName = card.getFirstName();
+            String lastName = card.getLastName();
+            String imgFileName = card.getImgFileName();
+            i.putExtra("firstName",firstName);
+            i.putExtra("lastName",lastName);
+            i.putExtra("imgFileName",imgFileName);
+            startActivity(i);
         }
 
         private void selectItem(int position) {

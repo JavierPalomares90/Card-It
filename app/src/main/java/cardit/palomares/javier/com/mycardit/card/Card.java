@@ -2,6 +2,7 @@ package cardit.palomares.javier.com.mycardit.card;
 
 import android.graphics.Bitmap;
 
+
 /**
  * Created by javierpalomares on 11/1/15.
  */
