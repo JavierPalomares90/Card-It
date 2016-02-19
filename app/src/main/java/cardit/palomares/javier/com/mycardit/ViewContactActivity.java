@@ -24,6 +24,7 @@ public class ViewContactActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_contact);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String firstName = extras.getString(FIRST_NAME);
@@ -32,12 +33,10 @@ public class ViewContactActivity extends Activity {
             Bitmap img = loadImg(imgFileName);
             currCard = new Card(firstName,lastName,img,imgFileName);
         }
-        // name is null
-        name = (EditText) findViewById(R.id.view_name);
-        cardView = (ImageView) findViewById(R.id.view_card_image);
+        name = (EditText) findViewById(R.id.view_card_view_name);
+        cardView = (ImageView) findViewById(R.id.view_card_view_image);
         name.setText(currCard.getFirstName() + " " + currCard.getLastName());
-        //cardView.setImageBitmap(currCard.getImg());
-        setContentView(R.layout.activity_view_contact);
+        cardView.setImageBitmap(currCard.getImg());
     }
 
     private Bitmap loadImg(String filePath)
