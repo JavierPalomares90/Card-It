@@ -1,6 +1,9 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.EditText;
@@ -9,6 +12,7 @@ import android.widget.TextView;
 import android.graphics.BitmapFactory;
 import android.widget.Button;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
@@ -47,6 +51,7 @@ public class ViewContactActivity extends Activity {
             }
         });
     }
+    
 
     private void deleteContact()
     {

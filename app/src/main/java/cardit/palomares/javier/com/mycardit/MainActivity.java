@@ -196,7 +196,6 @@ public class MainActivity extends Activity {
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
-            //updateDrawer();
         }
     }
 
