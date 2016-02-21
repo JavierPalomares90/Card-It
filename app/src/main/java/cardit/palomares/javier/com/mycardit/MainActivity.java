@@ -1,18 +1,14 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.app.Activity;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.ThumbnailUtils;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
@@ -29,14 +25,13 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
-import cardit.palomares.javier.com.mycardit.card.CardDatabase;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
+import android.content.SharedPreferences;
 
 //TODO: mImageBitmap reset on device rotation
 public class MainActivity extends Activity {
@@ -57,6 +52,7 @@ public class MainActivity extends Activity {
     private static int THUMBNAIL_HEIGHT = 500;
     private static String cardsFilePath = "myCardImg.png";
     private static int ADD_CONTACT_REQUEST = 2;
+    private static String IS_MY_CARD_SET = "isMyCardSet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +72,17 @@ public class MainActivity extends Activity {
                                                 }
                                             });
 
+        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        if(!settings.contains(IS_MY_CARD_SET))
+        {
+            setMyCard();
+        }
+
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
         /** TO DO: Need to cleanup this logic **/
-        setMyCard(myCard);
-        CardManager.getInstance(this).addCard(myCard);
+
         name = (EditText) findViewById(R.id.name);
-        name.setText(myCard.getFirstName() + " " + myCard.getLastName(), TextView.BufferType.EDITABLE);
+
 
         cardView = (ImageView) findViewById(R.id.imageView);
         cardView.setImageBitmap(myCard.getImg());
@@ -92,10 +93,43 @@ public class MainActivity extends Activity {
 
     }
 
-    private void setMyCard(Card card){
-        CardManager.getInstance(this).setMyCard(card);
+    private void setMyCard(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+        alertDialogBuilder.setTitle("Set your card");
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Hit enter to set your card")
+                .setCancelable(false)
+                .setPositiveButton("Enter",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, close
+                        // current activity
+                        formMyCard();
+                    }
+                })
+                .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, just close
+                        // the dialog box and do nothing
+                        dialog.cancel();
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
     }
 
+    private void formMyCard()
+    {
+        Log.d(TAG,"forming my Contact card");
+        Intent i = new Intent(MainActivity.this,AddContactActivity.class);
+        startActivityForResult(i, ADD_CONTACT_REQUEST);
+
+    }
     private void addContact(){
         Log.d(TAG,"In add Contact");
         Intent i = new Intent(MainActivity.this,AddContactActivity.class);

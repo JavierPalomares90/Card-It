@@ -51,7 +51,7 @@ public class ViewContactActivity extends Activity {
             }
         });
     }
-    
+
 
     private void deleteContact()
     {
