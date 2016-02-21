@@ -20,10 +20,7 @@ public class Card extends Object {
         this.imgFileName = imgFileName;
         this.id = 0; /**TODO: Need to find a way to set the id **/
     }
-    public int getId()
-    {
-        return id;
-    }
+
     public String getFirstName(){
         return firstName;
     }
@@ -40,6 +37,15 @@ public class Card extends Object {
         lastName = str;
     }
 
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
 
     public Bitmap getImg(){
         return img;

@@ -81,7 +81,7 @@ public class AddContactActivity extends Activity {
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                ;
+
                 firstNameString = s.toString();
             }
         });
@@ -97,7 +97,7 @@ public class AddContactActivity extends Activity {
 
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
-                ;
+
                 lastNameString = s.toString();
             }
         });

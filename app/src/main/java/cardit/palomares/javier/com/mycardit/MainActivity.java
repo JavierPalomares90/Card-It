@@ -77,6 +77,7 @@ public class MainActivity extends Activity {
                                             });
 
         myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
+        /** TO DO: Need to cleanup this logic **/
         setMyCard(myCard);
         CardManager.getInstance(this).addCard(myCard);
         name = (EditText) findViewById(R.id.name);
@@ -195,8 +196,15 @@ public class MainActivity extends Activity {
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
-            updateDrawer();
+            //updateDrawer();
         }
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        updateDrawer();
     }
 
     @Override
@@ -227,6 +235,8 @@ public class MainActivity extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             //selectItem(position);
             Card currCard = cards[position];
+            int idToSearch = position + 1;
+            currCard.setId(idToSearch);
             viewContactCard(currCard);
         }
 

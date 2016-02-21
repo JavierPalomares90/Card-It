@@ -79,17 +79,20 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("email", email);
         contentValues.put("street", street);
         contentValues.put("place", place);
-        db.update("contacts", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
+        db.update(CARDS_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(id) } );
         return true;
     }
     /**TODO: Need to think about best way to implement this **/
     public Integer deleteCard(Card card)
     {
         int id = card.getId();
+        String imgFileName = card.getImgFileName();
+        String firstName = card.getFirstName();
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(DATABASE_NAME,
-                "id = ? ",
-                new String[] { Integer.toString(id) });
+        int result = db.delete(CARDS_TABLE_NAME,
+                "imgFileName = ? ",
+                new String[] { imgFileName });
+        return result;
     }
 
 

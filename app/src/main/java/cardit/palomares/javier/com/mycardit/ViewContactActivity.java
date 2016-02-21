@@ -7,10 +7,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.graphics.BitmapFactory;
-
-
+import android.widget.Button;
+import android.view.View;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.CardManager;
 
 public class ViewContactActivity extends Activity {
     private Card currCard;
@@ -19,6 +20,7 @@ public class ViewContactActivity extends Activity {
     private static String IMG_FILE_NAME = "imgFileName";
     private EditText name;
     private ImageView cardView;
+    private Button button;
 
 
     @Override
@@ -37,6 +39,19 @@ public class ViewContactActivity extends Activity {
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
         name.setText(currCard.getFirstName() + " " + currCard.getLastName());
         cardView.setImageBitmap(currCard.getImg());
+        button = (Button) findViewById(R.id.delete_contact_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                deleteContact();
+            }
+        });
+    }
+
+    private void deleteContact()
+    {
+        CardManager.getInstance(this).deleteCard(currCard);
+        finish();
     }
 
     private Bitmap loadImg(String filePath)
