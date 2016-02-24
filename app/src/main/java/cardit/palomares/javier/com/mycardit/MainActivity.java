@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.TextView;
+import android.app.ActionBar;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,7 +42,6 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private Card myCard;
     private Card[] cards;
-    private EditText name;
     private ImageView cardView;
     private Button snapCardButton;
     private Button addContactButton;
@@ -51,7 +51,6 @@ public class MainActivity extends Activity {
     private static String TAG = "MyCardIt";
     private static int THUMBNAIL_WIDTH = 750;
     private static int THUMBNAIL_HEIGHT = 500;
-    private static String cardsFilePath = "myCardImg.png";
     private static int ADD_CONTACT_REQUEST = 2;
     private static int SET_MY_CARD_REQUEST = 3;
     private static String IS_MY_CARD_SET = "isMyCardSet";
@@ -78,14 +77,10 @@ public class MainActivity extends Activity {
                                             });
 
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        if(!settings.contains(IS_MY_CARD_SET))
+        while(!settings.contains(IS_MY_CARD_SET))
         {
             setMyCard();
         }
-
-
-
-        name = (EditText) findViewById(R.id.name);
 
         cardView = (ImageView) findViewById(R.id.imageView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -275,8 +270,13 @@ public class MainActivity extends Activity {
     {
         super.onResume();
         myCard = getMyCard();
-        name.setText(myCard.getFirstName() + " " + myCard.getLastName());
-        cardView.setImageBitmap(myCard.getImg());
+        if (myCard != null)
+        {
+            String title = "My Card: " + myCard.getFirstName() + " " + myCard.getLastName();
+            getActionBar().setTitle(title);
+            cardView.setImageBitmap(myCard.getImg());
+        }
+
         updateDrawer();
     }
 
@@ -330,9 +330,8 @@ public class MainActivity extends Activity {
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             Card currCard = cards[position];
-            getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
             mDrawerLayout.closeDrawer(mDrawerList);
-            name.setText(currCard.getFirstName() + " " + currCard.getLastName(), TextView.BufferType.EDITABLE);
+            getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
             cardView.setImageBitmap(currCard.getImg());
         }
     }

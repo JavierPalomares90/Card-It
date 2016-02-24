@@ -9,23 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cardit.palomares.javier.com.mycardit.ViewContactActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:clickable="false"
-        android:cursorVisible="false"
-        android:id="@+id/view_card_view_name"
-        android:layout_gravity="center_horizontal|top"
-        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/view_card_view_image"
-        android:layout_gravity="center"
-        android:layout_below="@+id/view_card_view_name" />
+        android:layout_gravity="center" />
 
     <Button
         android:layout_width="wrap_content"

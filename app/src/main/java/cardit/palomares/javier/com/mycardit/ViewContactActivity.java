@@ -22,7 +22,6 @@ public class ViewContactActivity extends Activity {
     private static String FIRST_NAME = "firstName";
     private static String LAST_NAME = "lastName";
     private static String IMG_FILE_NAME = "imgFileName";
-    private EditText name;
     private ImageView cardView;
     private Button button;
 
@@ -36,12 +35,11 @@ public class ViewContactActivity extends Activity {
             String firstName = extras.getString(FIRST_NAME);
             String lastName = extras.getString(LAST_NAME);
             String imgFileName = extras.getString(IMG_FILE_NAME);
+            getActionBar().setTitle(firstName + " " + lastName);
             Bitmap img = loadImg(imgFileName);
             currCard = new Card(firstName,lastName,img,imgFileName);
         }
-        name = (EditText) findViewById(R.id.view_card_view_name);
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
-        name.setText(currCard.getFirstName() + " " + currCard.getLastName());
         cardView.setImageBitmap(currCard.getImg());
         button = (Button) findViewById(R.id.delete_contact_button);
         button.setOnClickListener(new View.OnClickListener() {
