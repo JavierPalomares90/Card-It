@@ -43,7 +43,6 @@ public class MainActivity extends Activity {
     private Card myCard;
     private Card[] cards;
     private ImageView cardView;
-    private Button snapCardButton;
     private Button addContactButton;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
@@ -62,12 +61,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        snapCardButton = (Button) findViewById(R.id.snap_card_button);
-        snapCardButton.setOnClickListener(new View.OnClickListener() {
-             public void onClick(View v) {
-                 snapCard();
-             }
-         });
 
         addContactButton = (Button) findViewById(R.id.add_contact_button);
         addContactButton.setOnClickListener(new View.OnClickListener() {
