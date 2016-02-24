@@ -1,12 +1,13 @@
 package cardit.palomares.javier.com.mycardit.card;
 
 import android.graphics.Bitmap;
+import java.util.Comparator;
 
 
 /**
  * Created by javierpalomares on 11/1/15.
  */
-public class Card extends Object {
+public class Card extends Object implements Comparable<Card>{
     private String firstName;
     private String lastName;
     private Bitmap img;
@@ -63,4 +64,10 @@ public class Card extends Object {
         return imgFileName;
     }
 
+    public int compareTo(Card card)
+    {
+        return this.firstName.compareTo(card.getFirstName());
+    }
+
 }
+

@@ -16,17 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.TextView;
-import android.app.ActionBar;
 
+import java.util.Arrays;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
@@ -193,9 +190,9 @@ public class MainActivity extends Activity {
     {
         ArrayList<Card> allCards = CardManager.getInstance(this).getAllCards();
         cards = allCards.toArray(new Card[allCards.size()]);
+        Arrays.sort(cards);
         CardViewAdapter adapter = new CardViewAdapter(this, R.layout.contacts_listview_row,cards);
         mDrawerList.setAdapter(adapter);
-
     }
 
     @Override
