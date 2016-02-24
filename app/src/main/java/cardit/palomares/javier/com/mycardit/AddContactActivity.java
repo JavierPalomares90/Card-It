@@ -43,6 +43,7 @@ public class AddContactActivity extends Activity {
     private static String TAG = "MyCardIt";
     private static int THUMBNAIL_WIDTH = 750;
     private static int THUMBNAIL_HEIGHT = 500;
+    private static int SET_MY_CARD_REQUEST = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +132,7 @@ public class AddContactActivity extends Activity {
         return image;
     }
 
-        @Override
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");

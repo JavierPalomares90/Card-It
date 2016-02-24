@@ -25,6 +25,7 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
@@ -52,7 +53,11 @@ public class MainActivity extends Activity {
     private static int THUMBNAIL_HEIGHT = 500;
     private static String cardsFilePath = "myCardImg.png";
     private static int ADD_CONTACT_REQUEST = 2;
+    private static int SET_MY_CARD_REQUEST = 3;
     private static String IS_MY_CARD_SET = "isMyCardSet";
+    private static String FIRST_NAME = "firstName";
+    private static String LAST_NAME = "lastName";
+    private static String IMG_FILE_PATH = "imgFilePath";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,19 +83,27 @@ public class MainActivity extends Activity {
             setMyCard();
         }
 
-        myCard = new Card("Javier", "Palomares", BitmapFactory.decodeResource(getResources(),R.drawable.android),cardsFilePath);
-        /** TO DO: Need to cleanup this logic **/
+
 
         name = (EditText) findViewById(R.id.name);
 
-
         cardView = (ImageView) findViewById(R.id.imageView);
-        cardView.setImageBitmap(myCard.getImg());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         updateDrawer();
         mDrawerList.setOnItemClickListener(new CardClickListener());
 
+    }
+
+    private Card getMyCard(){
+        Card result = null;
+        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        String firstName = settings.getString(FIRST_NAME, FIRST_NAME);
+        String lastName = settings.getString(LAST_NAME,LAST_NAME);
+        String imgPath = settings.getString(IMG_FILE_PATH,getApplicationInfo().dataDir);
+
+        result = new Card(firstName,lastName,BitmapFactory.decodeFile(imgPath),imgPath);
+        return result;
     }
 
     private void setMyCard(){
@@ -127,7 +140,7 @@ public class MainActivity extends Activity {
     {
         Log.d(TAG,"forming my Contact card");
         Intent i = new Intent(MainActivity.this,AddContactActivity.class);
-        startActivityForResult(i, ADD_CONTACT_REQUEST);
+        startActivityForResult(i,SET_MY_CARD_REQUEST);
 
     }
     private void addContact(){
@@ -231,12 +244,39 @@ public class MainActivity extends Activity {
             Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
             CardManager.getInstance(this).addCard(newCard);
         }
+        else if (requestCode == SET_MY_CARD_REQUEST && resultCode == RESULT_OK){
+            Log.d(TAG,"Got a requestCode SET_MY_CARD_REQUEST");
+            String firstName;
+            String lastName;
+            String cardImgPath;
+            Bitmap thumbnail;
+            Bundle extras = data.getExtras();
+            if (extras == null){
+                Log.d(TAG,"Extras are null. Exiting");
+                return;
+            }
+            firstName = extras.getString("firstName");
+
+            lastName = extras.getString("lastName");
+            cardImgPath = extras.getString("photoPath");
+
+            SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(FIRST_NAME,firstName);
+            editor.putString(LAST_NAME,lastName);
+            editor.putString(IMG_FILE_PATH, cardImgPath);
+            editor.putBoolean(IS_MY_CARD_SET, true);
+            editor.commit();
+        }
     }
 
     @Override
     public void onResume()
     {
         super.onResume();
+        myCard = getMyCard();
+        name.setText(myCard.getFirstName() + " " + myCard.getLastName());
+        cardView.setImageBitmap(myCard.getImg());
         updateDrawer();
     }
 
