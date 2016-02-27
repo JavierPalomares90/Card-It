@@ -1,18 +1,14 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 import android.app.Activity;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.graphics.BitmapFactory;
 import android.widget.Button;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.MenuItem;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
@@ -39,6 +35,7 @@ public class ViewContactActivity extends Activity {
             Bitmap img = loadImg(imgFileName);
             currCard = new Card(firstName,lastName,img,imgFileName);
         }
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
         cardView.setImageBitmap(currCard.getImg());
         button = (Button) findViewById(R.id.delete_contact_button);
@@ -50,6 +47,16 @@ public class ViewContactActivity extends Activity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Handle item selection
+        if (id==android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
+    }
 
     private void deleteContact()
     {
