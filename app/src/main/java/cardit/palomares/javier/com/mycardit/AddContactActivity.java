@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -102,6 +103,7 @@ public class AddContactActivity extends Activity {
                 lastNameString = s.toString();
             }
         });
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void snapCard(){
@@ -143,6 +145,17 @@ public class AddContactActivity extends Activity {
             mImageBitmap = imageBitmap;
             Log.d(TAG,"photo saved to: " + savePath);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // Handle item selection
+        if (id==android.R.id.home) {
+            finish();
+            return true;
+        }
+        return true;
     }
 
     private String savePhoto(Bitmap bitmapImage){
