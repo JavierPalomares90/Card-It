@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 
 import java.util.Arrays;
 import java.io.File;
@@ -32,9 +35,9 @@ import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
 import android.content.SharedPreferences;
 
-//TODO: mImageBitmap reset on device rotation
 public class MainActivity extends Activity {
 
+    private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private Card myCard;
@@ -77,7 +80,26 @@ public class MainActivity extends Activity {
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         updateDrawer();
         mDrawerList.setOnItemClickListener(new CardClickListener());
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
 
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
     private Card getMyCard(){
@@ -123,9 +145,9 @@ public class MainActivity extends Activity {
 
     private void formMyCard()
     {
-        Log.d(TAG,"forming my Contact card");
+        Log.d(TAG, "forming my Contact card");
         Intent i = new Intent(MainActivity.this,AddContactActivity.class);
-        startActivityForResult(i,SET_MY_CARD_REQUEST);
+        startActivityForResult(i, SET_MY_CARD_REQUEST);
 
     }
     private void addContact(){
@@ -268,6 +290,7 @@ public class MainActivity extends Activity {
         }
 
         updateDrawer();
+        mDrawerToggle.syncState();
     }
 
     @Override
@@ -288,8 +311,23 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private class CardClickListener implements ListView.OnItemClickListener {
