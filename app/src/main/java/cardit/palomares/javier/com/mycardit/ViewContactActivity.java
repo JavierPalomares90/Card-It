@@ -20,7 +20,6 @@ public class ViewContactActivity extends Activity {
     private static String LAST_NAME = "lastName";
     private static String IMG_FILE_NAME = "imgFileName";
     private ImageView cardView;
-    private Button button;
 
 
     @Override
@@ -39,13 +38,6 @@ public class ViewContactActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
         cardView.setImageBitmap(currCard.getImg());
-        button = (Button) findViewById(R.id.delete_contact_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Perform action on click
-                deleteContact();
-            }
-        });
     }
 
     @Override
