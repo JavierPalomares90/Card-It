@@ -19,6 +19,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import java.io.FileNotFoundException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,6 +42,7 @@ public class AddContactActivity extends Activity {
     private Button addNewContactButton;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int GET_FROM_GALLERY = 2;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
     private static String TAG = "MyCardIt";
@@ -108,11 +112,32 @@ public class AddContactActivity extends Activity {
 
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 
-            startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
-        }
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+        String[] items = {"Capture card","Attach card"};
+        alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d(TAG,"selected" + which);
+                // Use the camera to select the card
+                if (which == 0)
+                {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+
+                        startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+                }
+                // Upload from files
+                else if (which == 1)
+                {
+                    startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+                }
+            }
+        }).create().show();
+
+
     }
 
     private File createImageFile() throws IOException {
@@ -130,7 +155,7 @@ public class AddContactActivity extends Activity {
 
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        Log.d(TAG,"photo Path:" + mCurrentPhotoPath);
+        Log.d(TAG, "photo Path:" + mCurrentPhotoPath);
         return image;
     }
 
@@ -144,6 +169,26 @@ public class AddContactActivity extends Activity {
             String savePath = savePhoto(imageBitmap);
             mImageBitmap = imageBitmap;
             Log.d(TAG,"photo saved to: " + savePath);
+        }
+        else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
+        {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try{
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                Log.e(TAG,e.getMessage());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                Log.e(TAG,e.getMessage());
+            }
+            if (bitmap != null) {
+                cardView.setImageBitmap(bitmap);
+                String savePath = savePhoto(bitmap);
+                mImageBitmap = bitmap;
+                Log.d(TAG, "photo saved to " + savePath);
+            }
         }
     }
 
