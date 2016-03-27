@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Menu;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.widget.Button;
@@ -48,11 +49,24 @@ public class ViewContactActivity extends Activity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.view_contact_menu,menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
         int id = item.getItemId();
         // Handle item selection
         if (id==android.R.id.home) {
             finish();
+            return true;
+        }
+        if (id== R.id.delete_contact_option)
+        {
+            deleteContact();
             return true;
         }
         return true;
