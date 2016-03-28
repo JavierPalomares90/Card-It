@@ -1,5 +1,6 @@
 package cardit.palomares.javier.com.mycardit;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -43,6 +44,7 @@ public class AddContactActivity extends Activity {
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GET_FROM_GALLERY = 2;
+    private static final int PIC_CROP = 3;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
     private static String TAG = "MyCardIt";
@@ -161,19 +163,17 @@ public class AddContactActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        Bitmap bitmap = null;
+        if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            cardView.setImageBitmap(imageBitmap);
-            String savePath = savePhoto(imageBitmap);
-            mImageBitmap = imageBitmap;
-            Log.d(TAG,"photo saved to: " + savePath);
+            bitmap = (Bitmap) extras.get("data");
+
         }
         else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
         {
             Uri selectedImage = data.getData();
-            Bitmap bitmap = null;
+
             try{
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
             } catch (FileNotFoundException e) {
@@ -183,15 +183,47 @@ public class AddContactActivity extends Activity {
                 // TODO Auto-generated catch block
                 Log.e(TAG,e.getMessage());
             }
-            if (bitmap != null) {
-                cardView.setImageBitmap(bitmap);
-                String savePath = savePhoto(bitmap);
-                mImageBitmap = bitmap;
-                Log.d(TAG, "photo saved to " + savePath);
-            }
+        }
+        if (bitmap != null)
+        {
+            bitmap = cropAndRotateImage(bitmap);
+            cardView.setImageBitmap(bitmap);
+            String savePath = savePhoto(bitmap);
+            mImageBitmap = bitmap;
+            Log.d(TAG,"photo saved to: " + savePath);
         }
     }
 
+    private Bitmap cropAndRotateImage(Bitmap bitmap)
+    {
+        Uri picUri = null;
+        try {
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            cropIntent.setDataAndType(picUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 4);
+            cropIntent.putExtra("aspectY", 3);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 200);
+            cropIntent.putExtra("outputY", 150);
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, PIC_CROP);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException anfe) {
+            // display an error message
+            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        return bitmap;
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
