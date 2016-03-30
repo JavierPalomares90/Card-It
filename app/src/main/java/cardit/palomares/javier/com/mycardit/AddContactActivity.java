@@ -163,53 +163,50 @@ public class AddContactActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bitmap bitmap = null;
+        Uri imgUri = null;
         if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
-            Bundle extras = data.getExtras();
-            bitmap = (Bitmap) extras.get("data");
-
-        }
-        else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
+            imgUri= data.getData();
+            if (imgUri != null)
+            {
+                Toast.makeText(getApplicationContext(),
+                        "Cropping and rotating your image", Toast.LENGTH_LONG).show();
+                cropAndRotateImage(imgUri);
+            }
+        }else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
         {
-            Uri selectedImage = data.getData();
+            if (data != null) {
+                // get the returned data
+                Bundle extras = data.getExtras();
+                // get the cropped bitmap
+                Bitmap selectedBitmap = extras.getParcelable("data");
 
-            try{
-                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),selectedImage);
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                Log.e(TAG,e.getMessage());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                Log.e(TAG,e.getMessage());
+                cardView.setImageBitmap(selectedBitmap);
+                String savePath = savePhoto(selectedBitmap);
+                mImageBitmap = selectedBitmap;
+                Log.d(TAG, "photo saved to: " + savePath);
             }
         }
-        if (bitmap != null)
-        {
-            bitmap = cropAndRotateImage(bitmap);
-            cardView.setImageBitmap(bitmap);
-            String savePath = savePhoto(bitmap);
-            mImageBitmap = bitmap;
-            Log.d(TAG,"photo saved to: " + savePath);
-        }
+
+
     }
 
-    private Bitmap cropAndRotateImage(Bitmap bitmap)
+    private void cropAndRotateImage(Uri imgUri)
     {
-        Uri picUri = null;
         try {
 
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
             // indicate image type and Uri
-            cropIntent.setDataAndType(picUri, "image/*");
+            cropIntent.setDataAndType(imgUri, "image/*");
             // set crop properties
             cropIntent.putExtra("crop", "true");
             // indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 4);
-            cropIntent.putExtra("aspectY", 3);
+            // Business cards have 7:4 ratio
+            cropIntent.putExtra("aspectX", 7);
+            cropIntent.putExtra("aspectY", 4);
             // indicate output X and Y
-            cropIntent.putExtra("outputX", 200);
-            cropIntent.putExtra("outputY", 150);
+            cropIntent.putExtra("outputX", 210);
+            cropIntent.putExtra("outputY", 120);
             // retrieve data on return
             cropIntent.putExtra("return-data", true);
             // start the activity - we handle returning in onActivityResult
@@ -222,8 +219,8 @@ public class AddContactActivity extends Activity {
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
-        return bitmap;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
