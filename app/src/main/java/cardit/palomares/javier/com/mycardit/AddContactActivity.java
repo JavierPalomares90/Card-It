@@ -42,6 +42,7 @@ public class AddContactActivity extends Activity {
     private String firstNameString;
     private String lastNameString;
     private Button addNewContactButton;
+    private Uri selectedImageUri;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GET_FROM_GALLERY = 2;
@@ -136,7 +137,8 @@ public class AddContactActivity extends Activity {
                     }
                     // Save the full size photo
                     if (file != null) {
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                        selectedImageUri = Uri.fromFile(file);
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
                     }
                     if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 
@@ -164,7 +166,7 @@ public class AddContactActivity extends Activity {
                 ".jpg",         // suffix
                 storageDir      // directory
         );
-
+        mCurrentPhotoPath = image.getAbsolutePath();
         Log.d(TAG, "photo Path:" + mCurrentPhotoPath);
         return image;
     }
@@ -175,6 +177,10 @@ public class AddContactActivity extends Activity {
         if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
             imgUri= data.getData();
+            if (imgUri == null)
+            {
+                imgUri = selectedImageUri;
+            }
             if (imgUri != null)
             {
                 Toast.makeText(getApplicationContext(),
@@ -187,12 +193,18 @@ public class AddContactActivity extends Activity {
                 // get the returned data
                 Bundle extras = data.getExtras();
                 // get the cropped bitmap
-                Bitmap selectedBitmap = extras.getParcelable("data");
-
-                cardView.setImageBitmap(selectedBitmap);
-                String savePath = savePhoto(selectedBitmap);
-                mImageBitmap = selectedBitmap;
-                Log.d(TAG, "photo saved to: " + savePath);
+                Uri uri = data.getData();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                }catch (Exception e)
+                {
+                    Log.e(TAG, "unable to get bitmap");
+                }
+                cardView.setImageBitmap(bitmap);
+                //String savePath = savePhoto(selectedBitmap);
+                mImageBitmap = bitmap;
+               // Log.d(TAG, "photo saved to: " + savePath);
             }
         }
     }
