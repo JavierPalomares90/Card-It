@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
 import cardit.palomares.javier.com.mycardit.card.Card;
 
 public class AddContactActivity extends Activity {
@@ -126,6 +127,17 @@ public class AddContactActivity extends Activity {
                 if (which == 0)
                 {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File file = null;
+                    try {
+                        file = createImageFile();
+                    }catch (Exception e)
+                    {
+                        Log.e(TAG,e.getMessage());
+                    }
+                    // Save the full size photo
+                    if (file != null) {
+                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+                    }
                     if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 
                         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
@@ -146,17 +158,13 @@ public class AddContactActivity extends Activity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File storageDir = cw.getDir("cardImageDirs", Context.MODE_PRIVATE);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  // prefix
                 ".jpg",         // suffix
                 storageDir      // directory
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         Log.d(TAG, "photo Path:" + mCurrentPhotoPath);
         return image;
     }
@@ -187,7 +195,21 @@ public class AddContactActivity extends Activity {
                 Log.d(TAG, "photo saved to: " + savePath);
             }
         }
+    }
 
+    private boolean hasImageCaptureBug() {
+
+        // list of known devices that have the bug
+        ArrayList<String> devices = new ArrayList<String>();
+        devices.add("android-devphone1/dream_devphone/dream");
+        devices.add("generic/sdk/generic");
+        devices.add("vodafone/vfpioneer/sapphire");
+        devices.add("tmobile/kila/dream");
+        devices.add("verizon/voles/sholes");
+        devices.add("google_ion/google_ion/sapphire");
+
+        return devices.contains(android.os.Build.BRAND + "/" + android.os.Build.PRODUCT + "/"
+                + android.os.Build.DEVICE);
 
     }
 
