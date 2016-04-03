@@ -32,10 +32,12 @@ public class CardDatabase {
     private static final String FIRST_NAME_NODE = "firstName";
     private static final String LAST_NAME_NODE = "lastName";
     private static final String IMG_FILE_NAME_NODE = "imgFileName";
+    private static final String BACK_IMG_FILE_NAME_NODE = "backImgFileName";
     private static final String MY_CARD_NODE = "myCard";
     private static final String MY_FIRST_NAME_NODE = "myFirstName";
     private static final String MY_LAST_NAME_NODE = "myLastName";
     private static final String MY_IMG_FILE_NAME_NODE = "myImgFileName";
+    private static final String MY_BACK_IMG_FILE_NAME_NODE = "myBackImgFileName";
     private static final String DEFAULT_FILE_NAME = "/data/user/0/cardit.palomares.javier.com.my.cardit/files/cards.config";
 
     private static String filename;
@@ -132,7 +134,7 @@ public class CardDatabase {
             Element myCardNode = out.addNode(root,MY_CARD_NODE);
             out.addNode(myCardNode,MY_FIRST_NAME_NODE,myCard.getFirstName());
             out.addNode(myCardNode,MY_LAST_NAME_NODE,myCard.getLastName());
-            out.addNode(myCardNode,MY_IMG_FILE_NAME_NODE,myCard.getImgFileName());
+            out.addNode(myCardNode,MY_IMG_FILE_NAME_NODE,myCard.getFrontCardImgFileName());
 
             Element cardsNode = out.addNode(root,CARDS_NODE);
 
@@ -146,7 +148,7 @@ public class CardDatabase {
                     //save the last name
                     out.addNode(node,LAST_NAME_NODE,card.getLastName());
                     //save the img file path
-                    out.addNode(node,IMG_FILE_NAME_NODE,card.getImgFileName());
+                    out.addNode(node,IMG_FILE_NAME_NODE,card.getFrontCardImgFileName());
 
                 }catch (Exception e)
                 {
@@ -269,7 +271,9 @@ public class CardDatabase {
             String myFirstName = null;
             String myLastName = null;
             String myFilePath = null;
+            String myBackFilePath = null;
             Bitmap myImg = null;
+            Bitmap myBackImg = null;
 
             List<Element> kids = reader.getChildNodes(myCardNode);
             for (int i = 0;i<kids.size();i++) {
@@ -287,17 +291,22 @@ public class CardDatabase {
                 {
                     myFilePath = reader.getNodeContents(curr);
                 }
+                else if (currName.equals(MY_BACK_IMG_FILE_NAME_NODE))
+                {
+                    myBackFilePath = reader.getNodeContents(curr);
+                }
                 else{
                     //TODO: Log error to logcat
                 }
             }
 
-            if (myFirstName != null && myLastName != null && myFilePath != null)
+            if (myFirstName != null && myLastName != null && myFilePath != null && myBackFilePath != null)
             {
                 BitmapFactory.Options option = new BitmapFactory.Options();
                 option.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 myImg =  BitmapFactory.decodeFile(myFilePath);
-                card = new Card(myFirstName,myLastName,myImg,myFilePath);
+                myBackImg = BitmapFactory.decodeFile(myBackFilePath);
+                card = new Card(myFirstName,myLastName,myImg,myFilePath,myBackImg,myBackFilePath);
             }
 
             if (card != null){
@@ -313,7 +322,9 @@ public class CardDatabase {
             String firstName = null;
             String lastName = null;
             String filePath = null;
+            String backFilePath = null;
             Bitmap img = null;
+            Bitmap backImg = null;
 
             List<Element> kids = reader.getChildNodes(cardNode);
             for (int i = 0;i<kids.size();i++) {
@@ -331,17 +342,22 @@ public class CardDatabase {
                 {
                     filePath = reader.getNodeContents(curr);
                 }
+                else  if (currName.equals(BACK_IMG_FILE_NAME_NODE))
+                {
+                    backFilePath = reader.getNodeContents(curr);
+                }
                 else{
                     //TODO: Log error to logcat
                 }
             }
 
-            if (firstName != null && lastName != null && filePath != null)
+            if (firstName != null && lastName != null && filePath != null && backFilePath != null)
             {
                 BitmapFactory.Options option = new BitmapFactory.Options();
                 option.inPreferredConfig = Bitmap.Config.ARGB_8888;
                 img =  BitmapFactory.decodeFile(filePath);
-                card = new Card(firstName,lastName,img,filePath);
+                backImg = BitmapFactory.decodeFile(backFilePath);
+                card = new Card(firstName,lastName,img,filePath, backImg, backFilePath);
             }
             if( card != null)
             {

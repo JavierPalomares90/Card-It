@@ -49,10 +49,10 @@ public class AddContactActivity extends Activity {
     private static final int PIC_CROP = 3;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
+    private Bitmap backCardBitmap;
+    private String backCardPhotoPath;
+    private boolean isFront;
     private static String TAG = "MyCardIt";
-    private static int THUMBNAIL_WIDTH = 750;
-    private static int THUMBNAIL_HEIGHT = 500;
-    private static int SET_MY_CARD_REQUEST = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,8 @@ public class AddContactActivity extends Activity {
         lastNameString = null;
         mImageBitmap = null;
         mCurrentPhotoPath = null;
+        backCardBitmap = null;
+        backCardPhotoPath = null;
         setContentView(R.layout.activity_add_contact);
         addNewContactButton = (Button) findViewById(R.id.add_new_contact_button);
         snapCardButton = (Button) findViewById(R.id.snap_new_card_button);
@@ -117,6 +119,21 @@ public class AddContactActivity extends Activity {
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("We'll get the front and back of the card!")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        isFront = true;
+                        addImages();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void addImages()
+    {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
         String[] items = {"Capture card","Attach card"};
@@ -152,8 +169,7 @@ public class AddContactActivity extends Activity {
                 }
             }
         }).create().show();
-
-
+        isFront = !isFront;
     }
 
     private File createImageFile() throws IOException {
@@ -314,20 +330,25 @@ public class AddContactActivity extends Activity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mCurrentPhotoPath = photoFile.getAbsolutePath();
+        if( isFront) {
+            mCurrentPhotoPath = photoFile.getAbsolutePath();
+        }else {
+            backCardPhotoPath = photoFile.getAbsolutePath();
+        }
         return Uri.fromFile(photoFile);
     }
 
-    private void addNewContact(){
+    private void addNewContact() {
         Log.d(TAG,"In add New Contact");
-        if (mImageBitmap != null && firstNameString != null && lastNameString != null && mCurrentPhotoPath!= null)
+        if (mImageBitmap != null && firstNameString != null && lastNameString != null && mCurrentPhotoPath!= null && backCardBitmap != null && backCardPhotoPath != null)
         {
-            myCard = new Card(firstNameString,lastNameString,mImageBitmap,mCurrentPhotoPath);
+            myCard = new Card(firstNameString,lastNameString,mImageBitmap,mCurrentPhotoPath,backCardBitmap,backCardPhotoPath);
             Log.d(TAG, "Made new card");
             Intent returnIntent = new Intent();
             returnIntent.putExtra("firstName",firstNameString);
             returnIntent.putExtra("lastName",lastNameString);
             returnIntent.putExtra("photoPath", mCurrentPhotoPath);
+            returnIntent.putExtra("backPhotoPath",backCardPhotoPath);
             setResult(Activity.RESULT_OK, returnIntent);
             Log.d(TAG, "Exiting add new Contact activity");
             finish();

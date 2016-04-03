@@ -5,11 +5,11 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
-import android.widget.Button;
-import android.view.View;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
@@ -19,25 +19,53 @@ public class ViewContactActivity extends Activity {
     private static String FIRST_NAME = "firstName";
     private static String LAST_NAME = "lastName";
     private static String IMG_FILE_NAME = "imgFileName";
+    private static String BACK_IMG_FILE_NAME = "backImgFileName";
     private ImageView cardView;
+    private boolean isFront;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFront = true;
         setContentView(R.layout.activity_view_contact);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String firstName = extras.getString(FIRST_NAME);
             String lastName = extras.getString(LAST_NAME);
             String imgFileName = extras.getString(IMG_FILE_NAME);
+            String backImgFileName = extras.getString(BACK_IMG_FILE_NAME);
             getActionBar().setTitle(firstName + " " + lastName);
             Bitmap img = loadImg(imgFileName);
-            currCard = new Card(firstName,lastName,img,imgFileName);
+            Bitmap backImg = loadImg(backImgFileName);
+            currCard = new Card(firstName,lastName,img,imgFileName,backImg,backImgFileName);
         }
         getActionBar().setDisplayHomeAsUpEnabled(true);
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
-        cardView.setImageBitmap(currCard.getImg());
+        cardView.setImageBitmap(currCard.getFrontCardImg());
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text;
+                Bitmap bitmap;
+                if (isFront){
+                    text = "Switching to back of card";
+                    bitmap = currCard.getBackCardImg();
+                }
+                else
+                {
+                    text = "Switching to front of card";
+                    bitmap = currCard.getFrontCardImg();
+                }
+                isFront = !isFront;
+                Toast.makeText(v.getContext(),
+                        text,
+                        Toast.LENGTH_LONG).show();
+                if(bitmap != null) {
+                    cardView.setImageBitmap(bitmap);
+                }
+            }
+        });
     }
 
     @Override

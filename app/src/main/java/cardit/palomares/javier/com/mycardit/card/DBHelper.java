@@ -1,9 +1,8 @@
 package cardit.palomares.javier.com.mycardit.card;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -19,10 +18,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "MyCardsDB.db";
     public static final String CARDS_TABLE_NAME = "cards";
-    public static final String CARDS_COLUMN_ID = "id";
     public static final String CARDS_COLUMN_FIRST_NAME = "firstName";
     public static final String CARDS_COLUMN_LAST_NAME = "lastName";
     public static final String CARDS_COLUMN_IMG_FILE_NAME = "imgFileName";
+    public static final String CARDS_COLUMN_BACK_IMG_FILE_NAME = "backImgFileName";
     private HashMap hp;
 
     public DBHelper(Context context)
@@ -52,7 +51,8 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(CARDS_COLUMN_FIRST_NAME,card.getFirstName());
         contentValues.put(CARDS_COLUMN_LAST_NAME,card.getLastName());
-        contentValues.put(CARDS_COLUMN_IMG_FILE_NAME, card.getImgFileName());
+        contentValues.put(CARDS_COLUMN_IMG_FILE_NAME, card.getFrontCardImgFileName());
+        contentValues.put(CARDS_COLUMN_BACK_IMG_FILE_NAME,card.getBackCardImgFileName());
         db.insert(CARDS_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -85,8 +85,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**TODO: Need to think about best way to implement this **/
     public Integer deleteCard(Card card)
     {
-        int id = card.getId();
-        String imgFileName = card.getImgFileName();
+        String imgFileName = card.getFrontCardImgFileName();
         String firstName = card.getFirstName();
         SQLiteDatabase db = this.getWritableDatabase();
         int result = db.delete(CARDS_TABLE_NAME,
@@ -110,7 +109,8 @@ public class DBHelper extends SQLiteOpenHelper {
             String firstName = res.getString(res.getColumnIndex(CARDS_COLUMN_FIRST_NAME));
             String lastName = res.getString(res.getColumnIndex(CARDS_COLUMN_LAST_NAME));
             String filePath = res.getString(res.getColumnIndex(CARDS_COLUMN_IMG_FILE_NAME));
-            Card card = new Card(firstName,lastName,null,filePath);
+            String backPath = res.getString(res.getColumnIndex(CARDS_COLUMN_BACK_IMG_FILE_NAME));
+            Card card = new Card(firstName,lastName,null,filePath,null,backPath);
             cards.add(card);
             res.moveToNext();
         }

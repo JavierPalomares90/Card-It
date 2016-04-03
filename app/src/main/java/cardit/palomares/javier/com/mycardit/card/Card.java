@@ -1,7 +1,6 @@
 package cardit.palomares.javier.com.mycardit.card;
 
 import android.graphics.Bitmap;
-import java.util.Comparator;
 
 
 /**
@@ -10,16 +9,18 @@ import java.util.Comparator;
 public class Card extends Object implements Comparable<Card>{
     private String firstName;
     private String lastName;
-    private Bitmap img;
-    private String imgFileName;
-    private int id;
+    private Bitmap frontCardImg;
+    private String frontCardImgFileName;
+    private Bitmap backCardImg;
+    private String backCardImgFileName;
 
-    public Card(String firstName,String lastName,Bitmap img,String imgFileName){
+    public Card(String firstName,String lastName,Bitmap frontCardImg,String frontCardImgFileName, Bitmap backCardImg, String backCardImgFileName){
         this.firstName = firstName;
         this.lastName = lastName;
-        this.img = img;
-        this.imgFileName = imgFileName;
-        this.id = 0; /**TODO: Need to find a way to set the id **/
+        this.frontCardImg = frontCardImg;
+        this.frontCardImgFileName = frontCardImgFileName;
+        this.backCardImg = backCardImg;
+        this.backCardImgFileName = backCardImgFileName;
     }
 
     public String getFirstName(){
@@ -38,30 +39,40 @@ public class Card extends Object implements Comparable<Card>{
         lastName = str;
     }
 
-    public void setId(int id)
+    public Bitmap getFrontCardImg(){
+        return frontCardImg;
+    }
+
+    public void setFrontCardImg(Bitmap bitmap){
+        frontCardImg = bitmap;
+    }
+
+    public void setFrontCardImgFileName(String str){
+        frontCardImgFileName = str;
+    }
+
+    public String getFrontCardImgFileName(){
+        return frontCardImgFileName;
+    }
+
+    public Bitmap getBackCardImg()
     {
-        this.id = id;
+        return backCardImg;
     }
 
-    public int getId()
+    public void setBackCardImg(Bitmap bitmap)
     {
-        return id;
+        backCardImg = bitmap;
     }
 
-    public Bitmap getImg(){
-        return img;
+    public String getBackCardImgFileName()
+    {
+        return backCardImgFileName;
     }
 
-    public void setImg(Bitmap bitmap){
-        img = bitmap;
-    }
-
-    public void setImgFileName(String str){
-        imgFileName = str;
-    }
-
-    public String getImgFileName(){
-        return imgFileName;
+    public void setBackCardImgFileName(String file)
+    {
+        backCardImgFileName = file;
     }
 
     public int compareTo(Card card)

@@ -47,14 +47,13 @@ public class MainActivity extends Activity {
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
     private static String TAG = "MyCardIt";
-    private static int THUMBNAIL_WIDTH = 750;
-    private static int THUMBNAIL_HEIGHT = 500;
     private static int ADD_CONTACT_REQUEST = 2;
     private static int SET_MY_CARD_REQUEST = 3;
     private static String IS_MY_CARD_SET = "isMyCardSet";
     private static String FIRST_NAME = "firstName";
     private static String LAST_NAME = "lastName";
     private static String IMG_FILE_PATH = "imgFilePath";
+    private static String BACK_IMG_FILE_PATH = "backImgFilePath";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +106,9 @@ public class MainActivity extends Activity {
         String firstName = settings.getString(FIRST_NAME, FIRST_NAME);
         String lastName = settings.getString(LAST_NAME,LAST_NAME);
         String imgPath = settings.getString(IMG_FILE_PATH,getApplicationInfo().dataDir);
+        String backImgPath = settings.getString(BACK_IMG_FILE_PATH,getApplicationInfo().dataDir);
 
-        result = new Card(firstName,lastName,BitmapFactory.decodeFile(imgPath),imgPath);
+        result = new Card(firstName,lastName,BitmapFactory.decodeFile(imgPath),imgPath,BitmapFactory.decodeFile(backImgPath),backImgPath);
         return result;
     }
 
@@ -234,7 +234,9 @@ public class MainActivity extends Activity {
             String firstName;
             String lastName;
             String cardImgPath;
+            String backCardImgPath;
             Bitmap thumbnail;
+            Bitmap backThumbnail;
             Bundle extras = data.getExtras();
             if (extras == null){
                 Log.d(TAG,"Extras are null. Exiting");
@@ -244,10 +246,14 @@ public class MainActivity extends Activity {
 
             lastName = extras.getString("lastName");
             cardImgPath = extras.getString("photoPath");
+            backCardImgPath = extras.getString("backPhotoPath");
+
+
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
             thumbnail = BitmapFactory.decodeFile(cardImgPath, options);
-            Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath);
+            backThumbnail = BitmapFactory.decodeFile(backCardImgPath,options);
+            Card newCard = new Card(firstName,lastName,thumbnail,cardImgPath,backThumbnail,backCardImgPath);
             CardManager.getInstance(this).addCard(newCard);
         }
         else if (requestCode == SET_MY_CARD_REQUEST && resultCode == RESULT_OK){
@@ -285,7 +291,7 @@ public class MainActivity extends Activity {
         {
             String title = "My Card: " + myCard.getFirstName() + " " + myCard.getLastName();
             getActionBar().setTitle(title);
-            cardView.setImageBitmap(myCard.getImg());
+            cardView.setImageBitmap(myCard.getFrontCardImg());
         }
 
         updateDrawer();
@@ -336,7 +342,6 @@ public class MainActivity extends Activity {
             //selectItem(position);
             Card currCard = cards[position];
             int idToSearch = position + 1;
-            currCard.setId(idToSearch);
             viewContactCard(currCard);
         }
 
@@ -345,7 +350,7 @@ public class MainActivity extends Activity {
             Intent i = new Intent(MainActivity.this,ViewContactActivity.class);
             String firstName = card.getFirstName();
             String lastName = card.getLastName();
-            String imgFileName = card.getImgFileName();
+            String imgFileName = card.getFrontCardImgFileName();
             i.putExtra("firstName",firstName);
             i.putExtra("lastName",lastName);
             i.putExtra("imgFileName",imgFileName);
@@ -359,7 +364,7 @@ public class MainActivity extends Activity {
             Card currCard = cards[position];
             mDrawerLayout.closeDrawer(mDrawerList);
             getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
-            cardView.setImageBitmap(currCard.getImg());
+            cardView.setImageBitmap(currCard.getFrontCardImg());
         }
     }
 

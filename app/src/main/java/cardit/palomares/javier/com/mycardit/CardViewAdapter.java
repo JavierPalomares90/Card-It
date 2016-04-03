@@ -42,7 +42,7 @@ public class CardViewAdapter extends ArrayAdapter<Card> {
         Card folder = data[position];
 
 
-        imageViewIcon.setImageBitmap(folder.getImg());
+        imageViewIcon.setImageBitmap(folder.getFrontCardImg());
         textViewName.setText(folder.getFirstName());
 
         return listItem;
