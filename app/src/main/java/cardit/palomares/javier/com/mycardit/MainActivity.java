@@ -262,6 +262,7 @@ public class MainActivity extends Activity {
             String lastName;
             String cardImgPath;
             Bitmap thumbnail;
+            String backCardImgPath;
             Bundle extras = data.getExtras();
             if (extras == null){
                 Log.d(TAG,"Extras are null. Exiting");
@@ -271,12 +272,14 @@ public class MainActivity extends Activity {
 
             lastName = extras.getString("lastName");
             cardImgPath = extras.getString("photoPath");
+            backCardImgPath = extras.getString("backPhotoPath");
 
             SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(FIRST_NAME,firstName);
             editor.putString(LAST_NAME,lastName);
             editor.putString(IMG_FILE_PATH, cardImgPath);
+            editor.putString(BACK_IMG_FILE_PATH,backCardImgPath);
             editor.putBoolean(IS_MY_CARD_SET, true);
             editor.commit();
         }
@@ -351,9 +354,11 @@ public class MainActivity extends Activity {
             String firstName = card.getFirstName();
             String lastName = card.getLastName();
             String imgFileName = card.getFrontCardImgFileName();
+            String backImgFileName = card.getBackCardImgFileName();
             i.putExtra("firstName",firstName);
             i.putExtra("lastName",lastName);
             i.putExtra("imgFileName",imgFileName);
+            i.putExtra("backImgFileName",backImgFileName);
             startActivity(i);
         }
 
