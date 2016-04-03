@@ -174,7 +174,8 @@ public class AddContactActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Uri imgUri = null;
-        if (requestCode == REQUEST_IMAGE_CAPTURE || requestCode == GET_FROM_GALLERY && resultCode == RESULT_OK) {
+        // TODO: If save image from gallery to storage prior to rotating and cropping
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
             imgUri= data.getData();
             if (imgUri == null)
@@ -187,7 +188,32 @@ public class AddContactActivity extends Activity {
                         "Cropping and rotating your image", Toast.LENGTH_LONG).show();
                 cropAndRotateImage(imgUri);
             }
-        }else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
+        }
+        else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
+        {
+            Log.d(TAG, " Got a requestCode GET_FROM_GALLERY");
+            Uri img = data.getData();
+            if (img == null)
+            {
+                img = selectedImageUri;
+            }
+            if (img != null)
+            {
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), img);
+                }catch (Exception e)
+                {
+                    Log.e(TAG, "unable to get bitmap");
+                }
+                imgUri = savePhoto(bitmap);
+                Toast.makeText(getApplicationContext(),
+                        "Cropping and rotating your image", Toast.LENGTH_LONG).show();
+                cropAndRotateImage(imgUri);
+
+            }
+        }
+        else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
         {
             if (data != null) {
                 // get the returned data
@@ -202,6 +228,7 @@ public class AddContactActivity extends Activity {
                     Log.e(TAG, "unable to get bitmap");
                 }
                 cardView.setImageBitmap(bitmap);
+                // TODO: Save photo
                 //String savePath = savePhoto(selectedBitmap);
                 mImageBitmap = bitmap;
                // Log.d(TAG, "photo saved to: " + savePath);
@@ -266,7 +293,7 @@ public class AddContactActivity extends Activity {
         return true;
     }
 
-    private String savePhoto(Bitmap bitmapImage){
+    private Uri savePhoto(Bitmap bitmapImage){
         // Create the File where the photo should go
         File photoFile = null;
         try {
@@ -288,7 +315,7 @@ public class AddContactActivity extends Activity {
             e.printStackTrace();
         }
         mCurrentPhotoPath = photoFile.getAbsolutePath();
-        return photoFile.getAbsolutePath();
+        return Uri.fromFile(photoFile);
     }
 
     private void addNewContact(){
