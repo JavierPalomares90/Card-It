@@ -67,11 +67,11 @@ public class MainActivity extends Activity {
                                                 }
                                             });
 
-        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        while(!settings.contains(IS_MY_CARD_SET))
-        {
+        //SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        //while(!settings.contains(IS_MY_CARD_SET))
+        //{
             setMyCard();
-        }
+        //}
 
         cardView = (ImageView) findViewById(R.id.imageView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
