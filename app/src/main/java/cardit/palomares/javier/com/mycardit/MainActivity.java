@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
     private static String LAST_NAME = "lastName";
     private static String IMG_FILE_PATH = "imgFilePath";
     private static String BACK_IMG_FILE_PATH = "backImgFilePath";
+    private static String MY_CARD_PREFERENCES = "MyCardPreferences";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,11 +68,11 @@ public class MainActivity extends Activity {
                                                 }
                                             });
 
-        //SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
-        //while(!settings.contains(IS_MY_CARD_SET))
-        //{
+        SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
+        if(!settings.contains(IS_MY_CARD_SET))
+        {
             setMyCard();
-        //}
+        }
 
         cardView = (ImageView) findViewById(R.id.imageView);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
