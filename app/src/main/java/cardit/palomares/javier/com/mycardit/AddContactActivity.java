@@ -338,7 +338,7 @@ public class AddContactActivity extends Activity {
             photoFile = createImageFile();
         } catch (IOException ex) {
             // Error occurred while creating the File
-            Log.i(TAG, ex.getMessage());
+            Log.e(TAG, ex.getMessage());
         }
         // Continue only if the File was successfully created
         FileOutputStream fos = null;
@@ -395,6 +395,7 @@ public class AddContactActivity extends Activity {
         @Override
         protected Uri doInBackground(Uri... uris)
         {
+            Log.d(TAG,"Saving card in background thread");
             Uri uri = uris[0];
             Bitmap bitmap = null;
             try {
