@@ -118,24 +118,34 @@ public class AddContactActivity extends Activity {
 
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
-
+        isFront = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We'll get the front and back of the card!")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        isFront = true;
-                        addImages();
+                        //add front image
+                        addImage();
+                        // add back image
+                        addImage();
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void addImages()
+    private void addImage()
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
+        String title = "";
+        if (isFront){
+            title = "Select the front of the card";
+        }else
+        {
+            title = "Select the back of the card";
+        }
+        alertDialogBuilder.setTitle(title);
         String[] items = {"Capture card","Attach card"};
         alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -169,7 +179,6 @@ public class AddContactActivity extends Activity {
                 }
             }
         }).create().show();
-        isFront = !isFront;
     }
 
     private File createImageFile() throws IOException {
@@ -203,7 +212,9 @@ public class AddContactActivity extends Activity {
                 Toast.makeText(getApplicationContext(),
                         "Cropping and rotating your image", Toast.LENGTH_LONG).show();
                 cropAndRotateImage(imgUri);
+
             }
+
         }
         else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
         {
@@ -247,6 +258,7 @@ public class AddContactActivity extends Activity {
                 // TODO: Save photo
                 //String savePath = savePhoto(selectedBitmap);
                 mImageBitmap = bitmap;
+                isFront = !isFront;
                // Log.d(TAG, "photo saved to: " + savePath);
             }
         }
