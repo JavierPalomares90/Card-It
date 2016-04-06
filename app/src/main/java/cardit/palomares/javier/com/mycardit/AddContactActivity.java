@@ -1,5 +1,6 @@
 package cardit.palomares.javier.com.mycardit;
 
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -45,6 +46,7 @@ public class AddContactActivity extends Activity {
     private String lastNameString;
     private Button addNewContactButton;
     private Uri selectedImageUri;
+    private ProgressDialog mProgressDialog;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GET_FROM_GALLERY = 2;
@@ -77,6 +79,13 @@ public class AddContactActivity extends Activity {
                 snapCard();
             }
         });
+
+        // instantiate it within the onCreate method
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Saving to private storage");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(true);
 
         addNewContactButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -230,18 +239,7 @@ public class AddContactActivity extends Activity {
             }
             if (img != null)
             {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), img);
-                }catch (Exception e)
-                {
-                    Log.e(TAG, "unable to get bitmap");
-                }
-                imgUri = savePhoto(bitmap);
-                Toast.makeText(getApplicationContext(),
-                        "Cropping and rotating your image", Toast.LENGTH_LONG).show();
-                cropAndRotateImage(imgUri);
-
+                new SaveBitmapTask(this).execute(img);
             }
         }
         else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
@@ -382,6 +380,53 @@ public class AddContactActivity extends Activity {
             Toast toast = Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG);
             toast.show();
         }
+    }
+
+    private class SaveBitmapTask extends AsyncTask<Uri,Void,Uri>
+    {
+        private Context context;
+
+        public SaveBitmapTask(Context context)
+        {
+            this.context = context;
+        }
+
+        // Save the picture in the background
+        @Override
+        protected Uri doInBackground(Uri... uris)
+        {
+            Uri uri = uris[0];
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            }catch (Exception e)
+            {
+                Log.e(TAG, "unable to get bitmap");
+            }
+            return savePhoto(bitmap);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog.show();
+        }
+
+        @Override
+        protected void onPostExecute(Uri result) {
+            mProgressDialog.dismiss();
+            if (result != null) {
+                Toast.makeText(context, "Saved the card.", Toast.LENGTH_LONG).show();
+            }
+            else {
+                Toast.makeText(context, "Unable to save card to private storage.", Toast.LENGTH_SHORT).show();
+            }
+            Toast.makeText(getApplicationContext(),
+                    "Cropping and rotating your image", Toast.LENGTH_LONG).show();
+            cropAndRotateImage(result);
+        }
+
+
     }
 
 }
