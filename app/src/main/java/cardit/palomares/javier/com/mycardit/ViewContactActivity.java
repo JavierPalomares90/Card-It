@@ -49,19 +49,20 @@ public class ViewContactActivity extends Activity {
                 String text;
                 Bitmap bitmap;
                 if (isFront){
-                    text = "Switching to back of card";
+                    text = "Showing back of card";
                     bitmap = currCard.getBackCardImg();
                 }
                 else
                 {
-                    text = "Switching to front of card";
+                    text = "Showing front of card";
                     bitmap = currCard.getFrontCardImg();
                 }
                 isFront = !isFront;
-                Toast.makeText(v.getContext(),
-                        text,
-                        Toast.LENGTH_LONG).show();
+
                 if(bitmap != null) {
+                    Toast.makeText(v.getContext(),
+                            text,
+                            Toast.LENGTH_LONG).show();
                     cardView.setImageBitmap(bitmap);
                 }
             }

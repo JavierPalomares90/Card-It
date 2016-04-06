@@ -33,9 +33,11 @@ import java.util.ArrayList;
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+    private static boolean isFront;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -59,6 +61,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isFront = true;
         setContentView(R.layout.activity_main);
 
         addContactButton = (Button) findViewById(R.id.add_contact_button);
@@ -75,6 +78,30 @@ public class MainActivity extends Activity {
         }
 
         cardView = (ImageView) findViewById(R.id.imageView);
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text;
+                Bitmap bitmap;
+                if (isFront){
+                    text = "Showing back of card";
+                    bitmap = myCard.getBackCardImg();
+                }
+                else
+                {
+                    text = "Showing front of card";
+                    bitmap = myCard.getFrontCardImg();
+                }
+                isFront = !isFront;
+
+                if(bitmap != null) {
+                    Toast.makeText(v.getContext(),
+                            text,
+                            Toast.LENGTH_LONG).show();
+                    cardView.setImageBitmap(bitmap);
+                }
+            }
+        });
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         updateDrawer();
@@ -275,7 +302,7 @@ public class MainActivity extends Activity {
             cardImgPath = extras.getString("photoPath");
             backCardImgPath = extras.getString("backPhotoPath");
 
-            SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putString(FIRST_NAME,firstName);
             editor.putString(LAST_NAME,lastName);
