@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Environment;
@@ -27,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
@@ -124,9 +126,7 @@ public class AddContactActivity extends Activity {
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //add front image
-                        addImage();
-                        // add back image
+                        // add front image
                         addImage();
                     }
                 });
@@ -191,7 +191,11 @@ public class AddContactActivity extends Activity {
                 ".jpg",         // suffix
                 storageDir      // directory
         );
-        mCurrentPhotoPath = image.getAbsolutePath();
+        if( isFront) {
+            mCurrentPhotoPath = image.getAbsolutePath();
+        }else{
+            backCardPhotoPath = image.getAbsolutePath();
+        }
         Log.d(TAG, "photo Path:" + mCurrentPhotoPath);
         return image;
     }
@@ -257,8 +261,16 @@ public class AddContactActivity extends Activity {
                 cardView.setImageBitmap(bitmap);
                 // TODO: Save photo
                 //String savePath = savePhoto(selectedBitmap);
-                mImageBitmap = bitmap;
+                if(isFront) {
+                    mImageBitmap = bitmap;
+                }else{
+                    backCardBitmap = bitmap;
+                }
                 isFront = !isFront;
+                // add back Image
+                if (!isFront) {
+                    addImage();
+                }
                // Log.d(TAG, "photo saved to: " + savePath);
             }
         }
@@ -371,4 +383,5 @@ public class AddContactActivity extends Activity {
             toast.show();
         }
     }
+
 }
