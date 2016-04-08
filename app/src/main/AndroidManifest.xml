@@ -23,10 +23,13 @@
         </activity>
         <activity
             android:name=".AddContactActivity"
-            android:label="@string/title_activity_add_contact"></activity>
+            android:label="@string/title_activity_add_contact" />
         <activity
             android:name=".ViewContactActivity"
-            android:label="@string/title_activity_view_contact"></activity>
+            android:label="@string/title_activity_view_contact" />
+        <activity
+            android:name=".NFCTransferActivity"
+            android:label="@string/title_activity_nfctransfer"></activity>
     </application>
 
 </manifest>
