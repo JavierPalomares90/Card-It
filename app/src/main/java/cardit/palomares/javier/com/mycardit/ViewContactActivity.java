@@ -48,18 +48,16 @@ public class ViewContactActivity extends Activity {
             public void onClick(View v) {
                 String text;
                 Bitmap bitmap;
-                if (isFront){
+                if (isFront) {
                     text = "Showing back of card";
                     bitmap = currCard.getBackCardImg();
-                }
-                else
-                {
+                } else {
                     text = "Showing front of card";
                     bitmap = currCard.getFrontCardImg();
                 }
                 isFront = !isFront;
 
-                if(bitmap != null) {
+                if (bitmap != null) {
                     Toast.makeText(v.getContext(),
                             text,
                             Toast.LENGTH_LONG).show();
@@ -72,7 +70,7 @@ public class ViewContactActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        getMenuInflater().inflate(R.menu.view_contact_menu,menu);
+        getMenuInflater().inflate(R.menu.view_contact_menu, menu);
         return true;
     }
 
@@ -81,14 +79,20 @@ public class ViewContactActivity extends Activity {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
         // Handle item selection
-        if (id==android.R.id.home) {
+        if (id == android.R.id.home) {
             finish();
             return true;
         }
-        if (id== R.id.delete_contact_option)
+        if (id == R.id.delete_contact_option)
         {
             deleteContact();
             return true;
+        }
+        if( id == R.id.transfer_contact_option)
+        {
+            Toast.makeText(this,
+                    "Transfering",
+                    Toast.LENGTH_LONG).show();
         }
         return true;
     }

@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table cards " +
-                        "(id integer primary key, firstName text,lastName text,imgFileName text)"
+                        "(id integer primary key, firstName text,lastName text,imgFileName text, backImgFileName text)"
         );
     }
 
