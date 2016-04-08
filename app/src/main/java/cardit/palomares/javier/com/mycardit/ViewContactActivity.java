@@ -1,5 +1,6 @@
 package cardit.palomares.javier.com.mycardit;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 
 import android.os.Bundle;
@@ -60,7 +61,7 @@ public class ViewContactActivity extends Activity {
                 if (bitmap != null) {
                     Toast.makeText(v.getContext(),
                             text,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                     cardView.setImageBitmap(bitmap);
                 }
             }
@@ -90,9 +91,7 @@ public class ViewContactActivity extends Activity {
         }
         if( id == R.id.transfer_contact_option)
         {
-            Toast.makeText(this,
-                    "Transfering",
-                    Toast.LENGTH_LONG).show();
+            transferCard();
         }
         return true;
     }
@@ -107,6 +106,19 @@ public class ViewContactActivity extends Activity {
     {
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         return  bitmap;
+    }
+
+    private void transferCard()
+    {
+        Toast.makeText(this,
+                "Transfering Card",
+                Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this,NFCTransferActivity.class);
+        i.putExtra(FIRST_NAME, currCard.getFirstName());
+        i.putExtra(LAST_NAME, currCard.getLastName());
+        i.putExtra(IMG_FILE_NAME, currCard.getFrontCardImgFileName());
+        i.putExtra(BACK_IMG_FILE_NAME, currCard.getBackCardImgFileName());
+        startActivity(i);
     }
 
 }
