@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.nfc.NfcAdapter;
+import android.nfc.NfcEvent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class NFCTransferActivity extends Activity {
     NfcAdapter mNfcAdapter;
     // List of URIs to provide to Android Beam
     private Uri[] mFileUris = new Uri[4];
+    private  FileUriCallback mFileUriCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class NFCTransferActivity extends Activity {
             setResult(Activity.RESULT_CANCELED);
             finish();
         }
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             firstName = extras.getString(FIRST_NAME);
@@ -64,11 +67,32 @@ public class NFCTransferActivity extends Activity {
         Uri frontCard = Uri.fromFile(frontCardFile);
         Uri backCard = Uri.fromFile(backCardFile);
 
+        /*
+         * Instantiate a new FileUriCallback to handle requests for
+         * URIs
+         */
+        mFileUriCallback = new FileUriCallback();
+        // Set the dynamic callback for URI requests.
+        mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback,this);
+
         mFileUris[0] = firstNameUri;
         mFileUris[1] = lastNameUri;
         mFileUris[2] = frontCard;
         mFileUris[3] = backCard;
 
+    }
+
+    private class FileUriCallback implements
+            NfcAdapter.CreateBeamUrisCallback {
+        public FileUriCallback() {
+        }
+        /**
+         * Create content URIs as needed to share with another device
+         */
+        @Override
+        public Uri[] createBeamUris(NfcEvent event) {
+            return mFileUris;
+        }
     }
 
 }
