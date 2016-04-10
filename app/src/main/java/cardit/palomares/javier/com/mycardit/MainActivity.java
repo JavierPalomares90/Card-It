@@ -130,7 +130,7 @@ public class MainActivity extends Activity {
 
     private Card getMyCard(){
         Card result = null;
-        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
         String firstName = settings.getString(FIRST_NAME, FIRST_NAME);
         String lastName = settings.getString(LAST_NAME,LAST_NAME);
         String imgPath = settings.getString(IMG_FILE_PATH,getApplicationInfo().dataDir);

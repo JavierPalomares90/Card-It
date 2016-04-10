@@ -70,7 +70,9 @@ public class AddContactActivity extends Activity {
         backCardPhotoPath = null;
         setContentView(R.layout.activity_add_contact);
         addNewContactButton = (Button) findViewById(R.id.add_new_contact_button);
+
         snapCardButton = (Button) findViewById(R.id.snap_new_card_button);
+
         cardView = (ImageView) findViewById(R.id.new_card_view);
         firstName = (EditText) findViewById(R.id.new_card_first_name_text);
         lastName = (EditText) findViewById(R.id.new_card_last_name_text);
@@ -79,6 +81,8 @@ public class AddContactActivity extends Activity {
                 snapCard();
             }
         });
+        snapCardButton.setClickable(false);
+        snapCardButton.setAlpha(.5f);
 
         // instantiate it within the onCreate method
         mProgressDialog = new ProgressDialog(this);
@@ -92,6 +96,8 @@ public class AddContactActivity extends Activity {
                 addNewContact();
             }
         });
+        addNewContactButton.setClickable(false);
+        addNewContactButton.setAlpha(.5f);
 
         firstName.addTextChangedListener(new TextWatcher() {
 
@@ -106,6 +112,11 @@ public class AddContactActivity extends Activity {
                                       int before, int count) {
 
                 firstNameString = s.toString();
+                if (firstNameString != null && lastNameString != null)
+                {
+                    snapCardButton.setClickable(true);
+                    snapCardButton.setAlpha(1f);
+                }
             }
         });
 
@@ -122,6 +133,11 @@ public class AddContactActivity extends Activity {
                                       int before, int count) {
 
                 lastNameString = s.toString();
+                if (firstNameString != null && lastNameString != null)
+                {
+                    snapCardButton.setClickable(true);
+                    snapCardButton.setAlpha(1f);
+                }
             }
         });
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -195,7 +211,7 @@ public class AddContactActivity extends Activity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
         String suffix = isFront ? "front": "back";
-        String imageFileName = firstNameString + "_" + lastNameString + suffix;
+        String imageFileName = firstNameString + "_" + lastNameString + "_" + suffix;
 
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -271,6 +287,11 @@ public class AddContactActivity extends Activity {
                 // add back Image
                 if (!isFront) {
                     addImage();
+                }
+                if (mImageBitmap!= null && backCardBitmap != null)
+                {
+                    addNewContactButton.setClickable(true);
+                    addNewContactButton.setAlpha(1f);
                 }
                // Log.d(TAG, "photo saved to: " + savePath);
             }
