@@ -7,7 +7,9 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +33,20 @@
             android:label="@string/title_activity_view_contact" />
         <activity
             android:name=".NFCTransferActivity"
-            android:label="@string/title_activity_nfctransfer"></activity>
+            android:label="@string/title_activity_nfctransfer" />
+        <activity
+            android:name=".NFCTransferListenerActivity"
+            android:label="@string/title_activity_nfctransfer_listener"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+
+        </activity>
+
     </application>
 
 </manifest>

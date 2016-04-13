@@ -7,13 +7,13 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cardit.palomares.javier.com.mycardit.NFCTransferActivity">
+    tools:context="cardit.palomares.javier.com.mycardit.NFCTransferListenerActivity">
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/transer_nfc_text_view"
-        android:text="@string/now_transferring_nfc"
+        android:text="@string/now_receiving_nfc"
         android:textStyle="bold"
         android:textColor="#ff00ff"
         android:background="#00ff00"

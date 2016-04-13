@@ -28,7 +28,7 @@ public class NFCTransferActivity extends Activity {
     private String backImgFileName;
     NfcAdapter mNfcAdapter;
     // List of URIs to provide to Android Beam
-    private Uri[] mFileUris = new Uri[4];
+    private Uri[] mFileUris = new Uri[2];
     private  FileUriCallback mFileUriCallback;
 
     @Override
@@ -75,10 +75,8 @@ public class NFCTransferActivity extends Activity {
         // Set the dynamic callback for URI requests.
         mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback,this);
 
-        mFileUris[0] = firstNameUri;
-        mFileUris[1] = lastNameUri;
-        mFileUris[2] = frontCard;
-        mFileUris[3] = backCard;
+        mFileUris[0] = frontCard;
+        mFileUris[1] = backCard;
 
     }
 
