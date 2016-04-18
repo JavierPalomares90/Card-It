@@ -59,6 +59,7 @@ public class NFCTransferListenerActivity extends Activity {
                 mParentPath = handleContentUri(beamUri);
             }
         }
+
     }
 
     public String handleFileUri(Uri beamUri) {
