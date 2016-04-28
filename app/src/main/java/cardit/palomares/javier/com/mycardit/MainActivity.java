@@ -57,6 +57,8 @@ public class MainActivity extends Activity {
     private static String IMG_FILE_PATH = "imgFilePath";
     private static String BACK_IMG_FILE_PATH = "backImgFilePath";
     private static String MY_CARD_PREFERENCES = "MyCardPreferences";
+    private static String IMG_FILE_NAME = "imgFileName";
+    private static String BACK_IMG_FILE_NAME = "backImgFileName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +213,7 @@ public class MainActivity extends Activity {
         return image;
     }
 
+
     private String savePhoto(Bitmap bitmapImage){
         // Create the File where the photo should go
         File photoFile = null;
@@ -347,11 +350,30 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id ==R.id.transfer_my_contact_option)
+        {
+            transferCard();
+        }
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void transferCard()
+    {
+        if (myCard != null) {
+            Toast.makeText(this,
+                    "Transfering Card",
+                    Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(this, NFCTransferActivity.class);
+            i.putExtra(FIRST_NAME, myCard.getFirstName());
+            i.putExtra(LAST_NAME, myCard.getLastName());
+            i.putExtra(IMG_FILE_NAME, myCard.getFrontCardImgFileName());
+            i.putExtra(BACK_IMG_FILE_NAME, myCard.getBackCardImgFileName());
+            startActivity(i);
+        }
     }
 
     @Override
