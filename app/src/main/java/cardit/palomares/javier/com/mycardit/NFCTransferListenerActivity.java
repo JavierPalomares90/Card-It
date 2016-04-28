@@ -1,6 +1,9 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.nfc.NdefRecord;
 import android.os.Bundle;
 import android.app.Activity;
 import java.io.File;
@@ -8,6 +11,8 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.provider.MediaStore;
 import android.database.Cursor;
+
+import cardit.palomares.javier.com.mycardit.card.Card;
 
 public class NFCTransferListenerActivity extends Activity {
 
@@ -60,6 +65,25 @@ public class NFCTransferListenerActivity extends Activity {
             }
         }
 
+    }
+
+    private Card readMessage()
+    {
+        NdefRecord picRecord = records[0];
+        NdefRecord infoRecord = records[1];
+        byte[] picload = picRecord.getPayload();
+        byte[] infoload = infoRecord.getPayload();
+        Bitmap photo = BitmapFactory.decodeByteArray(picload, 0, picload.length);
+        String textEncoding = ((infoload[0] & 0200) == 0) ? "UTF-8" : "UTF-16";
+        int languageCodeLength = infoload[0] & 0077;
+        String text = null;
+        try{
+            String languageCode = new String(infoload, 1, languageCodeLength, "US-ASCII");
+            text = new String(infoload, languageCodeLength + 1,infoload.length - languageCodeLength - 1, textEncoding);
+        }catch(Exception e){
+            Alert("String decoding", e.toString());
+            return;
+        }
     }
 
     public String handleFileUri(Uri beamUri) {
