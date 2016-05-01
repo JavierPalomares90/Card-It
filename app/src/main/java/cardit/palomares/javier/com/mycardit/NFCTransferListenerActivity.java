@@ -3,134 +3,101 @@ package cardit.palomares.javier.com.mycardit;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.app.Activity;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.net.Uri;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.provider.MediaStore;
 import android.database.Cursor;
+import android.util.Log;
+import android.widget.Toast;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
+import cardit.palomares.javier.com.mycardit.card.CardManager;
 
 public class NFCTransferListenerActivity extends Activity {
-
-    // A File object containing the path to the transferred files
-    private String mParentPath;
-    // Incoming Intent
-    private Intent mIntent;
+    private static final String TAG = "NFCTransfer";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfctransfer_listener);
-    }
 
-    @Override
-    protected void onNewIntent(Intent intent)
-    {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        handleViewIntent();
-    }
+        Intent intent = getIntent();
+        if(intent.getType() != null && intent.getType().equals("image/jpeg/cardit.palomares.javier.com")) {
+            // Read the first record which contains the NFC data
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefRecord frontCardRecord = ((NdefMessage)rawMsgs[0]).getRecords()[0];
+            NdefRecord backCardRecord = ((NdefMessage)rawMsgs[0]).getRecords()[1];
+            NdefRecord firstNameRecord = ((NdefMessage)rawMsgs[0]).getRecords()[2];
+            NdefRecord lastNameRecord = ((NdefMessage)rawMsgs[0]).getRecords()[3];
+            String firstName = new String(firstNameRecord.getPayload());
+            String lastName = new String(lastNameRecord.getPayload());
+            Bitmap frontCard = BitmapFactory.decodeByteArray(frontCardRecord.getPayload(),0,1);
+            Bitmap backCard = BitmapFactory.decodeByteArray(backCardRecord.getPayload(),0,1);
 
-    /*
-     * Called from onNewIntent() for a SINGLE_TOP Activity
-     * or onCreate() for a new Activity. For onNewIntent(),
-     * remember to call setIntent() to store the most
-     * current Intent
-     *
-     */
-    private void handleViewIntent() {
-        // Get the Intent action
-        mIntent = getIntent();
-        String action = mIntent.getAction();
-        /*
-         * For ACTION_VIEW, the Activity is being asked to display data.
-         * Get the URI.
-         */
-        if (TextUtils.equals(action, Intent.ACTION_VIEW)) {
-            // Get the URI from the Intent
-            Uri beamUri = mIntent.getData();
-            /*
-             * Test for the type of URI, by getting its scheme value
-             */
-            if (TextUtils.equals(beamUri.getScheme(), "file")) {
-                mParentPath = handleFileUri(beamUri);
-            } else if (TextUtils.equals(
-                    beamUri.getScheme(), "content")) {
-                mParentPath = handleContentUri(beamUri);
-            }
-        }
+            String cardImgPath = savePhoto(frontCard, firstName, lastName, true);
+            String backCardImgPath = savePhoto(backCard,firstName, lastName, false);
+            Toast.makeText(this,"Adding the card for " + firstName + lastName, Toast.LENGTH_LONG).show();
 
-    }
+            Card newCard = new Card(firstName,lastName,frontCard,cardImgPath,backCard,backCardImgPath);
+            CardManager.getInstance(this).addCard(newCard);
 
-    private Card readMessage()
-    {
-        NdefRecord picRecord = records[0];
-        NdefRecord infoRecord = records[1];
-        byte[] picload = picRecord.getPayload();
-        byte[] infoload = infoRecord.getPayload();
-        Bitmap photo = BitmapFactory.decodeByteArray(picload, 0, picload.length);
-        String textEncoding = ((infoload[0] & 0200) == 0) ? "UTF-8" : "UTF-16";
-        int languageCodeLength = infoload[0] & 0077;
-        String text = null;
-        try{
-            String languageCode = new String(infoload, 1, languageCodeLength, "US-ASCII");
-            text = new String(infoload, languageCodeLength + 1,infoload.length - languageCodeLength - 1, textEncoding);
-        }catch(Exception e){
-            Alert("String decoding", e.toString());
-            return;
+            // Just finish the activity
+            finish();
         }
     }
 
-    public String handleFileUri(Uri beamUri) {
-        // Get the path part of the URI
-        String fileName = beamUri.getPath();
-        // Create a File object for this filename
-        File copiedFile = new File(fileName);
-        // Get a string containing the file's parent directory
-        return copiedFile.getParent();
+    private String savePhoto(Bitmap bitmapImage, String firstName, String lastName, boolean isFront){
+        // Create the File where the photo should go
+        File photoFile = null;
+        try {
+            photoFile = createImageFile(firstName, lastName,isFront);
+        } catch (IOException ex) {
+            // Error occurred while creating the File
+            Log.e(TAG, ex.getMessage());
+        }
+        // Continue only if the File was successfully created
+        FileOutputStream fos = null;
+        try {
+
+            fos = new FileOutputStream(photoFile);
+
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return photoFile.getAbsolutePath();
     }
 
-    public String handleContentUri(Uri beamUri) {
-        // Position of the filename in the query Cursor
-        int filenameIndex;
-        // File object for the filename
-        File copiedFile;
-        // The filename stored in MediaStore
-        String fileName;
-        // Test the authority of the URI
-        if (!TextUtils.equals(beamUri.getAuthority(), MediaStore.AUTHORITY)) {
-            /*
-             * Handle content URIs for other content providers
-             */
-            // For a MediaStore content URI
-        } else {
-            // Get the column that contains the file name
-            String[] projection = { MediaStore.MediaColumns.DATA };
-            Cursor pathCursor =
-                    getContentResolver().query(beamUri, projection,
-                            null, null, null);
-            // Check for a valid cursor
-            if (pathCursor != null &&
-                    pathCursor.moveToFirst()) {
-                // Get the column index in the Cursor
-                filenameIndex = pathCursor.getColumnIndex(
-                        MediaStore.MediaColumns.DATA);
-                // Get the full file name including path
-                fileName = pathCursor.getString(filenameIndex);
-                // Create a File object for the filename
-                copiedFile = new File(fileName);
-                // Return the parent directory of the file
-                return copiedFile.getParent();
-            } else {
-                // The query didn't work; return null
-                return null;
-            }
-        }
-        return null;
+    private File createImageFile(String firstNameString, String lastNameString, boolean isFront) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
+        String suffix = isFront ? "front": "back";
+        String imageFileName = firstNameString + "_" + lastNameString + "_" + suffix;
+
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  // prefix
+                ".jpg",         // suffix
+                storageDir      // directory
+        );
+        return image;
     }
+
 }
