@@ -1,13 +1,16 @@
 package cardit.palomares.javier.com.mycardit;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.NfcEvent;
 import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.widget.Toast;
@@ -36,6 +39,9 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
     // List of URIs to provide to Android Beam
     private Uri[] mFileUris = new Uri[2];
     private  FileUriCallback mFileUriCallback;
+
+    byte[] frontByteArray;
+    byte[] backByteArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +73,22 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
             backImgFileName = extras.getString(BACK_IMG_FILE_NAME);
         }
 
+        Runnable r = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                frontPhoto = BitmapFactory.decodeFile(imgFileName);
+                backPhoto = BitmapFactory.decodeFile(backImgFileName);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                frontPhoto.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                frontByteArray = stream.toByteArray();
+                stream.reset();
+                backPhoto.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+                backByteArray = stream.toByteArray();
+            }
+        };
+
         mNfcAdapter.setNdefPushMessageCallback(this,this);
         /*
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -95,14 +117,8 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
 
     private NdefMessage createCardNDef(Bitmap front, Bitmap back, String firstName, String lastName)
     {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        front.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-        byte[] frontByteArray = stream.toByteArray();
-        NdefRecord frontRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,  "image/jpeg".getBytes(), null, frontByteArray);
-        stream.reset();
-        back.compress(Bitmap.CompressFormat.JPEG, 80, stream);
-        byte[] backByteArray = stream.toByteArray();
-        NdefRecord backRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "image/jpeg".getBytes(), null, backByteArray);
+        NdefRecord frontRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,  "image/jpeg/cardit.palomares.javier.com".getBytes(), null, frontByteArray);;
+        NdefRecord backRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "image/jpeg/cardit.palomares.javier.com".getBytes(), null, backByteArray);
         NdefRecord firstNameRecord = NdefRecord.createTextRecord(null,firstName);
         NdefRecord lastNameRecord = NdefRecord.createTextRecord(null,lastName);
         NdefMessage message = new NdefMessage(new NdefRecord[]{frontRecord, backRecord, firstNameRecord, lastNameRecord});
