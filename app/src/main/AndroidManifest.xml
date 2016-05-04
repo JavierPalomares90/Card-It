@@ -39,7 +39,7 @@
             android:label="@string/title_activity_nfctransfer_listener"
             android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="image/jpeg/cardit.palomares.javier.com"/>
             </intent-filter>
