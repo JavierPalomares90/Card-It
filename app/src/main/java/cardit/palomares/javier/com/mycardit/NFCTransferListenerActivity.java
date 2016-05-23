@@ -11,6 +11,7 @@ import android.app.Activity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -43,8 +44,26 @@ public class NFCTransferListenerActivity extends Activity {
             NdefRecord backCardRecord = ((NdefMessage)rawMsgs[0]).getRecords()[1];
             NdefRecord firstNameRecord = ((NdefMessage)rawMsgs[0]).getRecords()[2];
             NdefRecord lastNameRecord = ((NdefMessage)rawMsgs[0]).getRecords()[3];
-            String firstName = new String(firstNameRecord.getPayload());
-            String lastName = new String(lastNameRecord.getPayload());
+
+            byte[] firstNameBytes = firstNameRecord.getPayload();
+            byte[] lastNameBytes = lastNameRecord.getPayload();
+
+            // Get the Text Encoding
+            String textEncoding = ((firstNameBytes[0] & 128) == 0) ? "UTF-8" : "UTF-16";
+
+            // Get the Language Code
+            int languageCodeLength = firstNameBytes[0] & 0063;
+            // bug in encoding of first name
+            String firstName = null;
+            String lastName = null;
+            try {
+                firstName = new String(firstNameBytes, languageCodeLength + textEncoding.length(), firstNameBytes.length - languageCodeLength - textEncoding.length(), textEncoding);
+                lastName = new String(lastNameBytes, languageCodeLength + textEncoding.length(), lastNameBytes.length - languageCodeLength - textEncoding.length(), textEncoding);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            // NPEing here
             Bitmap frontCard = BitmapFactory.decodeByteArray(frontCardRecord.getPayload(),0,1);
             Bitmap backCard = BitmapFactory.decodeByteArray(backCardRecord.getPayload(),0,1);
 

@@ -119,8 +119,8 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
     {
         NdefRecord frontRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,  "image/jpeg/cardit.palomares.javier.com".getBytes(), null, frontByteArray);;
         NdefRecord backRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, "image/jpeg/cardit.palomares.javier.com".getBytes(), null, backByteArray);
-        NdefRecord firstNameRecord = NdefRecord.createTextRecord(null,firstName);
-        NdefRecord lastNameRecord = NdefRecord.createTextRecord(null,lastName);
+        NdefRecord firstNameRecord = NdefRecord.createTextRecord("UTF-8",firstName);
+        NdefRecord lastNameRecord = NdefRecord.createTextRecord("UTF-8",lastName);
         NdefMessage message = new NdefMessage(new NdefRecord[]{frontRecord, backRecord, firstNameRecord, lastNameRecord});
         return message;
     }
