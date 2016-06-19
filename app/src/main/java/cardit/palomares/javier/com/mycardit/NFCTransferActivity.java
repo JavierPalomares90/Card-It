@@ -73,6 +73,13 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
             backImgFileName = extras.getString(BACK_IMG_FILE_NAME);
         }
 
+        mNfcAdapter.setNdefPushMessageCallback(this,this);
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
         Runnable r = new Runnable()
         {
             @Override
@@ -88,25 +95,7 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
                 backByteArray = stream.toByteArray();
             }
         };
-
-        mNfcAdapter.setNdefPushMessageCallback(this,this);
-        /*
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        Uri firstNameUri = Uri.parse(firstName);
-        Uri lastNameUri = Uri.parse(lastName);
-        File frontCardFile = new File(imgFileName);
-        File backCardFile = new File(backImgFileName);
-        Uri frontCard = Uri.fromFile(frontCardFile);
-        Uri backCard = Uri.fromFile(backCardFile);
-
-        mFileUriCallback = new FileUriCallback();
-        // Set the dynamic callback for URI requests.
-        mNfcAdapter.setBeamPushUrisCallback(mFileUriCallback,this);
-
-        mFileUris[0] = frontCard;
-        mFileUris[1] = backCard;
-        */
-
+        r.run();
     }
 
     @Override
