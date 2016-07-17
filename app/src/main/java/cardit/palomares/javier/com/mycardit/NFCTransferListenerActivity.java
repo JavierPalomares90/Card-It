@@ -64,8 +64,8 @@ public class NFCTransferListenerActivity extends Activity {
             }
 
             // NPEing here
-            Bitmap frontCard = BitmapFactory.decodeByteArray(frontCardRecord.getPayload(),0,1);
-            Bitmap backCard = BitmapFactory.decodeByteArray(backCardRecord.getPayload(),0,1);
+            Bitmap frontCard = BitmapFactory.decodeByteArray(frontCardRecord.getPayload(),0,frontCardRecord.getPayload().length);
+            Bitmap backCard = BitmapFactory.decodeByteArray(backCardRecord.getPayload(),0,backCardRecord.getPayload().length);
 
             String cardImgPath = savePhoto(frontCard, firstName, lastName, true);
             String backCardImgPath = savePhoto(backCard,firstName, lastName, false);
