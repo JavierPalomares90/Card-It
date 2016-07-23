@@ -234,7 +234,13 @@ public class AddContactActivity extends Activity {
         // TODO: If save image from gallery to storage prior to rotating and cropping
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
-            imgUri= data.getData();
+            if (data == null)
+            {
+                imgUri = selectedImageUri;
+            }else
+            {
+                imgUri = data.getData();
+            }
             if (imgUri == null)
             {
                 imgUri = selectedImageUri;
