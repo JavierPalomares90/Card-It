@@ -1,5 +1,7 @@
 package cardit.palomares.javier.com.mycardit;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -39,6 +41,7 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
     // List of URIs to provide to Android Beam
     private Uri[] mFileUris = new Uri[2];
     private  FileUriCallback mFileUriCallback;
+    private AlertDialog mAlertDialog;
 
     byte[] frontByteArray;
     byte[] backByteArray;
@@ -63,6 +66,7 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
             setResult(Activity.RESULT_CANCELED);
             finish();
         }
+
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         Bundle extras = getIntent().getExtras();
@@ -74,6 +78,14 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
         }
 
         mNfcAdapter.setNdefPushMessageCallback(this,this);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NFCTransferActivity.this);
+        alertDialogBuilder.setTitle("Transferring card");
+
+// set dialog message
+        alertDialogBuilder.setMessage("Tap your phones to transfer your card").setCancelable(false);
+        mAlertDialog = alertDialogBuilder.create();
+        mAlertDialog.show();
     }
 
     @Override

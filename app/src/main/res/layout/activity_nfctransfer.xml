@@ -9,15 +9,5 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cardit.palomares.javier.com.mycardit.NFCTransferActivity">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/transer_nfc_text_view"
-        android:text="@string/now_transferring_nfc"
-        android:textStyle="bold"
-        android:textColor="#ff00ff"
-        android:background="#00ff00"
-        android:textColorHighlight="#000000"
-        android:textIsSelectable="false" />
 
 </RelativeLayout>
