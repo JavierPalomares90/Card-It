@@ -46,6 +46,7 @@
 
 
         </activity>
+		<activity android:name="eu.janmuller.android.simplecropimage.CropImage"></activity>
 
     </application>
 

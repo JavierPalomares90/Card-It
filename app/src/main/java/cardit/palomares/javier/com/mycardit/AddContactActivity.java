@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +36,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import cardit.palomares.javier.com.mycardit.card.Card;
 
+import eu.janmuller.android.simplecropimage.CropImage;
+
 public class AddContactActivity extends Activity {
 
     private Card myCard;
@@ -55,6 +58,7 @@ public class AddContactActivity extends Activity {
     private String mCurrentPhotoPath;
     private Bitmap backCardBitmap;
     private String backCardPhotoPath;
+    private File      mFileTemp;
     private boolean isFront;
     private static String TAG = "MyCardIt";
 
@@ -270,17 +274,18 @@ public class AddContactActivity extends Activity {
         else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
         {
             if (data != null) {
-                // get the returned data
-                Bundle extras = data.getExtras();
-                // get the cropped bitmap
-                Uri uri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                }catch (Exception e)
-                {
-                    Log.e(TAG, "unable to get bitmap");
+
+                String path = data.getStringExtra(CropImage.IMAGE_PATH);
+
+                // if nothing received
+                if (path == null) {
+
+                    return;
                 }
+
+                // cropped bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(mFileTemp.getPath());
+
                 cardView.setImageBitmap(bitmap);
                 // TODO: Save photo
                 //String savePath = savePhoto(selectedBitmap);
@@ -299,7 +304,7 @@ public class AddContactActivity extends Activity {
                     addNewContactButton.setClickable(true);
                     addNewContactButton.setAlpha(1f);
                 }
-               // Log.d(TAG, "photo saved to: " + savePath);
+                Log.d(TAG, "photo saved to: " + mFileTemp);
             }
         }
     }
@@ -322,32 +327,22 @@ public class AddContactActivity extends Activity {
 
     private void cropAndRotateImage(Uri imgUri)
     {
-        try {
 
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            // indicate image type and Uri
-            cropIntent.setDataAndType(imgUri, "image/*");
-            // set crop properties
-            cropIntent.putExtra("crop", "true");
-            // indicate aspect of desired crop
-            // Business cards have 7:4 ratio
-            cropIntent.putExtra("aspectX", 7);
-            cropIntent.putExtra("aspectY", 4);
-            // indicate output X and Y
-            cropIntent.putExtra("outputX", 210);
-            cropIntent.putExtra("outputY", 120);
-            // retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            // start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, PIC_CROP);
-        }
-        // respond to users whose devices do not support the crop action
-        catch (ActivityNotFoundException anfe) {
-            // display an error message
-            String errorMessage = "Whoops - your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        // create explicit intent
+        Intent intent = new Intent(this, CropImage.class);
+
+        // tell CropImage activity to look for image to crop
+        String filePath = imgUri.getPath();
+        intent.putExtra(CropImage.IMAGE_PATH, filePath);
+        mFileTemp = new File(filePath);
+
+        // allow CropImage activity to rescale image
+        intent.putExtra(CropImage.SCALE, true);
+
+        // if the aspect ratio is fixed to ratio 3/2
+        intent.putExtra(CropImage.ASPECT_X, 7);
+        intent.putExtra(CropImage.ASPECT_Y, 4);
+        startActivityForResult(intent, PIC_CROP);
     }
 
     @Override

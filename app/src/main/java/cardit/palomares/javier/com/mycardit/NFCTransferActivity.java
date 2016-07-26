@@ -82,7 +82,7 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NFCTransferActivity.this);
         alertDialogBuilder.setTitle("Transferring card");
 
-// set dialog message
+        // set dialog message
         alertDialogBuilder.setMessage("Tap your phones to transfer your card").setCancelable(false);
         mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
