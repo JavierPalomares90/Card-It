@@ -342,7 +342,9 @@ public class AddContactActivity extends Activity {
         // if the aspect ratio is fixed to ratio 3/2
         intent.putExtra(CropImage.ASPECT_X, 7);
         intent.putExtra(CropImage.ASPECT_Y, 4);
-        startActivityForResult(intent, PIC_CROP);
+        intent.putExtra(CropImage.OUTPUT_X,210);
+        intent.putExtra(CropImage.OUTPUT_Y,120);
+        startActivityForResult(intent, PIC_CROP); 
     }
 
     @Override
