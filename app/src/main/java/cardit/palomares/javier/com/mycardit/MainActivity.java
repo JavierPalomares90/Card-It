@@ -126,8 +126,8 @@ public class MainActivity extends Activity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 
     private Card getMyCard(){
@@ -324,7 +324,7 @@ public class MainActivity extends Activity {
         if (myCard != null)
         {
             String title = "My Card: " + myCard.getFirstName() + " " + myCard.getLastName();
-            //getActionBar().setTitle(title);
+            getActionBar().setTitle(title);
             cardView.setImageBitmap(myCard.getFrontCardImg());
         }
 
@@ -418,7 +418,7 @@ public class MainActivity extends Activity {
             mDrawerList.setSelection(position);
             Card currCard = cards[position];
             mDrawerLayout.closeDrawer(mDrawerList);
-            //getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
+            getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
             cardView.setImageBitmap(currCard.getFrontCardImg());
         }
     }
