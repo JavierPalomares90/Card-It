@@ -35,6 +35,8 @@ import cardit.palomares.javier.com.mycardit.card.CardManager;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+
 public class MainActivity extends Activity {
 
     private static boolean isFront;
@@ -44,7 +46,7 @@ public class MainActivity extends Activity {
     private Card myCard;
     private Card[] cards;
     private ImageView cardView;
-    private Button addContactButton;
+    private FloatingActionButton mFloatingActionButton;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
@@ -60,18 +62,26 @@ public class MainActivity extends Activity {
     private static String IMG_FILE_NAME = "imgFileName";
     private static String BACK_IMG_FILE_NAME = "backImgFileName";
 
+    private View.OnClickListener mFabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+           addContact();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isFront = true;
         setContentView(R.layout.activity_main);
 
-        addContactButton = (Button) findViewById(R.id.add_contact_button);
-        addContactButton.setOnClickListener(new View.OnClickListener() {
-                                                public void onClick(View v) {
-                                                    addContact();
-                                                }
-                                            });
+        final ImageView plusIcon = new ImageView(this);
+        plusIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
+        mFloatingActionButton = new FloatingActionButton.Builder(this).setContentView(plusIcon)
+                .build();
+
+        mFloatingActionButton.setOnClickListener(mFabClickListener);
+        mFloatingActionButton.setBackground(getResources().getDrawable(R.drawable.button_action_red));
 
         SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
         if(!settings.contains(IS_MY_CARD_SET))
