@@ -25,6 +25,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+
 import java.io.FileNotFoundException;
 
 import java.io.File;
@@ -45,6 +48,7 @@ public class AddContactActivity extends Activity {
     private EditText lastName;
     private ImageView cardView;
     private Button snapCardButton;
+    private FloatingActionButton mFloatingActionButton;
     private String firstNameString;
     private String lastNameString;
     private Button addNewContactButton;

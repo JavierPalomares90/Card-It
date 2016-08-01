@@ -7,11 +7,11 @@
         <item> Mercury</item>
         <item>Venus</item>
     </string-array>
-    <string name="title_activity_add_contact">AddContactActivity</string>
+    <string name="title_activity_add_contact">New Contact</string>
     <string name="title_activity_view_contact">ViewContactActivity</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
-    <string name="title_activity_nfctransfer">NFCTransferActivity</string>
+    <string name="title_activity_nfctransfer">Tap to transfer</string>
     <string name="now_transferring_nfc">Now transferring card using NFC</string>
     <string name="now_receiving_nfc">Now receiving card using NFC</string>
     <string name="title_activity_nfctransfer_listener">NFCTransferListenerActivity</string>

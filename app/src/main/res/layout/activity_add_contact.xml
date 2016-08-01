@@ -34,6 +34,8 @@
         android:text="Snap Card"
         android:id="@+id/snap_new_card_button"
         android:layout_alignTop="@+id/add_new_contact_button"
+        android:background="@color/primaryColor"
+        android:textColor="@android:color/white"
         android:layout_alignStart="@+id/new_card_last_name_text" />
 
     <Button
@@ -43,6 +45,8 @@
         android:id="@+id/add_new_contact_button"
         android:layout_marginBottom="25dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/primaryColor"
+        android:textColor="@android:color/white"
         android:layout_toEndOf="@+id/new_card_view" />
 
     <EditText
