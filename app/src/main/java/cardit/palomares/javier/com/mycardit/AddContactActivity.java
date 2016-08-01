@@ -344,7 +344,7 @@ public class AddContactActivity extends Activity {
         intent.putExtra(CropImage.ASPECT_Y, 4);
         intent.putExtra(CropImage.OUTPUT_X,210);
         intent.putExtra(CropImage.OUTPUT_Y,120);
-        startActivityForResult(intent, PIC_CROP); 
+        startActivityForResult(intent, PIC_CROP);
     }
 
     @Override

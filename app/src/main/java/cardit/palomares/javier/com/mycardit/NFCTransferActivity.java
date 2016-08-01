@@ -3,6 +3,7 @@ package cardit.palomares.javier.com.mycardit;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -81,9 +82,14 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NFCTransferActivity.this);
         alertDialogBuilder.setTitle("Transferring card");
-
         // set dialog message
         alertDialogBuilder.setMessage("Tap your phones to transfer your card").setCancelable(false);
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
         mAlertDialog = alertDialogBuilder.create();
         mAlertDialog.show();
     }
