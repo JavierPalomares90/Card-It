@@ -18,7 +18,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 
@@ -40,6 +43,7 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 public class MainActivity extends Activity {
 
     private static boolean isFront;
+    private boolean fitToScreen;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -61,7 +65,7 @@ public class MainActivity extends Activity {
     private static String MY_CARD_PREFERENCES = "MyCardPreferences";
     private static String IMG_FILE_NAME = "imgFileName";
     private static String BACK_IMG_FILE_NAME = "backImgFileName";
-
+    private GestureDetector gestureDetector;
     private View.OnClickListener mFabClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -88,30 +92,12 @@ public class MainActivity extends Activity {
         {
             setMyCard();
         }
-
+        gestureDetector = new GestureDetector(MainActivity.this,new GestureListener());
         cardView = (ImageView) findViewById(R.id.imageView);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                String text;
-                Bitmap bitmap;
-                if (isFront){
-                    text = "Showing back of card";
-                    bitmap = myCard.getBackCardImg();
-                }
-                else
-                {
-                    text = "Showing front of card";
-                    bitmap = myCard.getFrontCardImg();
-                }
-                isFront = !isFront;
-
-                if(bitmap != null) {
-                    Toast.makeText(v.getContext(),
-                            text,
-                            Toast.LENGTH_LONG).show();
-                    cardView.setImageBitmap(bitmap);
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
             }
         });
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -430,6 +416,44 @@ public class MainActivity extends Activity {
             mDrawerLayout.closeDrawer(mDrawerList);
             getActionBar().setTitle(currCard.getFirstName() + " " + currCard.getLastName());
             cardView.setImageBitmap(currCard.getFrontCardImg());
+        }
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e){
+            if(fitToScreen == true){
+                // return to normal size
+
+            }
+            else{
+
+            }
+            fitToScreen = !fitToScreen;
+            return true;
+        }
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+            Bitmap bitmap;
+            if (isFront) {
+                bitmap = myCard.getBackCardImg();
+            } else {
+                bitmap = myCard.getFrontCardImg();
+            }
+            isFront = !isFront;
+
+            if (bitmap != null) {
+                cardView.setImageBitmap(bitmap);
+            }
+            return true;
         }
     }
 

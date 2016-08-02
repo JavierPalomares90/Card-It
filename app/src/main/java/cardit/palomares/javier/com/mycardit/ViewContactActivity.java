@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -26,7 +27,7 @@ public class ViewContactActivity extends Activity {
     private ImageView cardView;
     private boolean isFront;
     private GestureDetector gestureDetector;
-    private boolean tapped;
+    private boolean fitToScreen;
 
 
     @Override
@@ -114,6 +115,19 @@ public class ViewContactActivity extends Activity {
 
         @Override
         public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e){
+            if(fitToScreen == true){
+                // return to normal size
+
+            }
+            else{
+       
+            }
+            fitToScreen = !fitToScreen;
             return true;
         }
         // event when double tap occurs
