@@ -125,7 +125,7 @@ public class ViewContactActivity extends Activity {
 
             }
             else{
-       
+
             }
             fitToScreen = !fitToScreen;
             return true;

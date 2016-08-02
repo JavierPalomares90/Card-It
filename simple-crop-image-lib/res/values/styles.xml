@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="CropButton">
+    <style name="CropButton" parent="AppTheme.Base">
         <item name="android:layout_margin">1dp</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">3dp</item>
@@ -10,6 +10,12 @@
         <item name="android:textSize">20sp</item>
         <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/selector_crop_button</item>
+    </style>
+
+    <style name="AppTheme.Base" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/primaryColor</item>
+        <item name="android:colorPrimaryDark">@color/primaryColorDark</item>
+        <item name="android:colorAccent">@color/accentColor</item>
     </style>
 
 </resources>
