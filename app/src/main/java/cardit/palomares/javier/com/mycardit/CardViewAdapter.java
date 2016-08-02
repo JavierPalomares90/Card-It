@@ -43,7 +43,7 @@ public class CardViewAdapter extends ArrayAdapter<Card> {
 
 
         imageViewIcon.setImageBitmap(folder.getFrontCardImg());
-        textViewName.setText(folder.getFirstName());
+        textViewName.setText(folder.getFirstName() + " " + folder.getLastName());
 
         return listItem;
     }
