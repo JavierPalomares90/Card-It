@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 
 import cardit.palomares.javier.com.mycardit.card.Card;
 import cardit.palomares.javier.com.mycardit.card.CardManager;
@@ -23,6 +25,8 @@ public class ViewContactActivity extends Activity {
     private static String BACK_IMG_FILE_NAME = "backImgFileName";
     private ImageView cardView;
     private boolean isFront;
+    private GestureDetector gestureDetector;
+    private boolean tapped;
 
 
     @Override
@@ -44,26 +48,11 @@ public class ViewContactActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         cardView = (ImageView) findViewById(R.id.view_card_view_image);
         cardView.setImageBitmap(currCard.getFrontCardImg());
-        cardView.setOnClickListener(new View.OnClickListener() {
+        gestureDetector = new GestureDetector(ViewContactActivity.this,new GestureListener());
+        cardView.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                String text;
-                Bitmap bitmap;
-                if (isFront) {
-                    text = "Showing back of card";
-                    bitmap = currCard.getBackCardImg();
-                } else {
-                    text = "Showing front of card";
-                    bitmap = currCard.getFrontCardImg();
-                }
-                isFront = !isFront;
-
-                if (bitmap != null) {
-                    Toast.makeText(v.getContext(),
-                            text,
-                            Toast.LENGTH_SHORT).show();
-                    cardView.setImageBitmap(bitmap);
-                }
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
             }
         });
     }
@@ -119,6 +108,31 @@ public class ViewContactActivity extends Activity {
         i.putExtra(IMG_FILE_NAME, currCard.getFrontCardImgFileName());
         i.putExtra(BACK_IMG_FILE_NAME, currCard.getBackCardImgFileName());
         startActivity(i);
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+
+            Bitmap bitmap;
+            if (isFront) {
+                bitmap = currCard.getBackCardImg();
+            } else {
+                bitmap = currCard.getFrontCardImg();
+            }
+            isFront = !isFront;
+
+            if (bitmap != null) {
+                cardView.setImageBitmap(bitmap);
+            }
+            return true;
+        }
     }
 
 }
