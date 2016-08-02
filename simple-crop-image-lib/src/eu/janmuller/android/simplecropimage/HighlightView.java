@@ -20,6 +20,7 @@ package eu.janmuller.android.simplecropimage;
 import android.graphics.*;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Button;
 
 // This class is used by CropImage to display a highlighted cropping rectangle
 // overlayed with the image. There are two coordinate spaces in use. One is
@@ -87,7 +88,7 @@ class HighlightView {
             mContext.getDrawingRect(viewDrawingRect);
             if (mCircle) {
 				
-		canvas.save();
+		        canvas.save();
 
                 float width = mDrawRect.width();
                 float height = mDrawRect.height();
@@ -95,9 +96,9 @@ class HighlightView {
                         mDrawRect.top + (height / 2),
                         width / 2,
                         Path.Direction.CW);
-				mOutlinePaint.setColor(0xFFEF04D6);
+				//mOutlinePaint.setColor(0xFFEF04D6);
                 
-		canvas.clipPath(path, Region.Op.DIFFERENCE);
+		        canvas.clipPath(path, Region.Op.DIFFERENCE);
             	canvas.drawRect(viewDrawingRect,
                     hasFocus() ? mFocusPaint : mNoFocusPaint);
 
@@ -125,7 +126,7 @@ class HighlightView {
 
                 path.addRect(new RectF(mDrawRect), Path.Direction.CW);
             
-		mOutlinePaint.setColor(0xFFFF8A00);    
+		mOutlinePaint.setColor(0xFFF44336);
 
             }
             
@@ -450,4 +451,5 @@ class HighlightView {
     private final Paint mFocusPaint   = new Paint();
     private final Paint mNoFocusPaint = new Paint();
     private final Paint mOutlinePaint = new Paint();
+
 }

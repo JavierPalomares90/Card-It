@@ -82,6 +82,8 @@ public class AddContactActivity extends Activity {
         snapCardButton = (Button) findViewById(R.id.snap_new_card_button);
 
         cardView = (ImageView) findViewById(R.id.new_card_view);
+        cardView.setBackgroundColor(getResources().getColor(R.color.opaqueWhite));
+        cardView.setImageDrawable(getResources().getDrawable(R.drawable.ic_picture_in_picture_alt_black_24dp));
         firstName = (EditText) findViewById(R.id.new_card_first_name_text);
         lastName = (EditText) findViewById(R.id.new_card_last_name_text);
         snapCardButton.setOnClickListener(new View.OnClickListener() {
