@@ -19,14 +19,26 @@
         android:id="@+id/new_card_first_name_text"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="71dp" />
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords"
+        android:hint="Last Name"
+        android:ems="10"
+        android:id="@+id/new_card_last_name_text"
+        android:layout_below="@+id/new_card_first_name_text"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/new_card_view"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/new_card_last_name_text"
+        android:layout_centerInParent="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -43,20 +55,11 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/add_new_contact_button"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="8dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primaryColor"
         android:textColor="@android:color/white"
         android:layout_toEndOf="@+id/new_card_view" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textCapWords"
-        android:hint="Last Name"
-        android:ems="10"
-        android:id="@+id/new_card_last_name_text"
-        android:layout_below="@+id/new_card_first_name_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+
 </RelativeLayout>
