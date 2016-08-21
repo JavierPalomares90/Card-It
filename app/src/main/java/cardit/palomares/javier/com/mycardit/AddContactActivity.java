@@ -324,11 +324,11 @@ public class AddContactActivity extends Activity {
         // allow CropImage activity to rescale image
         intent.putExtra(CropImage.SCALE, true);
 
-        // if the aspect ratio is fixed to ratio 3/2
+        // if the aspect ratio is fixed to ratio 7/4
         intent.putExtra(CropImage.ASPECT_X, 7);
         intent.putExtra(CropImage.ASPECT_Y, 4);
-        intent.putExtra(CropImage.OUTPUT_X,210);
-        intent.putExtra(CropImage.OUTPUT_Y,120);
+        intent.putExtra(CropImage.OUTPUT_X,1050);
+        intent.putExtra(CropImage.OUTPUT_Y,600);
         startActivityForResult(intent, PIC_CROP);
     }
 
