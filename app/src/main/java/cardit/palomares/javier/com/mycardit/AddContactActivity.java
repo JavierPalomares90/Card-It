@@ -7,6 +7,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -60,6 +62,10 @@ public class AddContactActivity extends Activity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int GET_FROM_GALLERY = 2;
     private static final int PIC_CROP = 3;
+    private static int CARD_VIEW_WIDTH = 1400;
+    private static int CARD_VIEW_HEIGHT = 800;
+    private static int ASPECT_X = 7;
+    private static int ASPECT_Y = 4;
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath;
     private Bitmap backCardBitmap;
@@ -325,12 +331,13 @@ public class AddContactActivity extends Activity {
         intent.putExtra(CropImage.SCALE, true);
 
         // if the aspect ratio is fixed to ratio 7/4
-        intent.putExtra(CropImage.ASPECT_X, 7);
-        intent.putExtra(CropImage.ASPECT_Y, 4);
-        intent.putExtra(CropImage.OUTPUT_X,1050);
-        intent.putExtra(CropImage.OUTPUT_Y,600);
+        intent.putExtra(CropImage.ASPECT_X, ASPECT_X);
+        intent.putExtra(CropImage.ASPECT_Y, ASPECT_Y);
+        intent.putExtra(CropImage.OUTPUT_X,CARD_VIEW_WIDTH);
+        intent.putExtra(CropImage.OUTPUT_Y,CARD_VIEW_HEIGHT);
         startActivityForResult(intent, PIC_CROP);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
