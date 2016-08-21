@@ -17,7 +17,9 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,11 +45,11 @@ import eu.janmuller.android.simplecropimage.CropImage;
 
 public class AddContactActivity extends Activity {
 
+    //TODO: Bug when rotating phone halfway through snapping cards
     private Card myCard;
     private EditText firstName;
     private EditText lastName;
     private ImageView cardView;
-    private Button snapCardButton;
     private FloatingActionButton mFloatingActionButton;
     private String firstNameString;
     private String lastNameString;
@@ -79,19 +81,23 @@ public class AddContactActivity extends Activity {
         setContentView(R.layout.activity_add_contact);
         addNewContactButton = (Button) findViewById(R.id.add_new_contact_button);
 
-        snapCardButton = (Button) findViewById(R.id.snap_new_card_button);
 
         cardView = (ImageView) findViewById(R.id.new_card_view);
         cardView.setImageDrawable(getResources().getDrawable(R.drawable.ic_card_travel_black_48dp));
-        firstName = (EditText) findViewById(R.id.new_card_first_name_text);
-        lastName = (EditText) findViewById(R.id.new_card_last_name_text);
-        snapCardButton.setOnClickListener(new View.OnClickListener() {
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
-                snapCard();
+                if (firstNameString != null && lastNameString != null) {
+                    snapCard();
+                }
+                else {
+                    Toast.makeText(AddContactActivity.this,"Enter the first and last name",Toast.LENGTH_SHORT).show();
+                }
             }
         });
-        snapCardButton.setClickable(false);
-        snapCardButton.setAlpha(.5f);
+
+        firstName = (EditText) findViewById(R.id.new_card_first_name_text);
+        lastName = (EditText) findViewById(R.id.new_card_last_name_text);
 
         // instantiate it within the onCreate method
         mProgressDialog = new ProgressDialog(this);
@@ -121,11 +127,6 @@ public class AddContactActivity extends Activity {
                                       int before, int count) {
 
                 firstNameString = s.toString();
-                if (firstNameString != null && lastNameString != null)
-                {
-                    snapCardButton.setClickable(true);
-                    snapCardButton.setAlpha(1f);
-                }
             }
         });
 
@@ -142,11 +143,6 @@ public class AddContactActivity extends Activity {
                                       int before, int count) {
 
                 lastNameString = s.toString();
-                if (firstNameString != null && lastNameString != null)
-                {
-                    snapCardButton.setClickable(true);
-                    snapCardButton.setAlpha(1f);
-                }
             }
         });
         getActionBar().setDisplayHomeAsUpEnabled(true);
