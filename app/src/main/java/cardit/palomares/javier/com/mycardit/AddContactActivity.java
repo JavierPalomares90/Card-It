@@ -53,8 +53,8 @@ public class AddContactActivity extends Activity {
     private EditText lastName;
     private ImageView cardView;
     private FloatingActionButton mFloatingActionButton;
-    private String firstNameString;
-    private String lastNameString;
+    private String firstNameString = null;
+    private String lastNameString = null;
     private Button addNewContactButton;
     private Uri selectedImageUri;
     private ProgressDialog mProgressDialog;
@@ -66,24 +66,47 @@ public class AddContactActivity extends Activity {
     private static int CARD_VIEW_HEIGHT = 800;
     private static int ASPECT_X = 7;
     private static int ASPECT_Y = 4;
+    private static final String FIRST_NAME = "firstName";
+    private static final String LAST_NAME = "lastName";
+    private static final String FRONT_PHOTO_PATH = "frontPhotoPath";
+    private static final String BACK_PHOTO_PATH = "backPhotoPath";
     private Bitmap mImageBitmap;
-    private String mCurrentPhotoPath;
+    private String mCurrentPhotoPath = null;
     private Bitmap backCardBitmap;
-    private String backCardPhotoPath;
+    private String backCardPhotoPath = null;
     private File      mFileTemp;
     private boolean isFront;
     private static String TAG = "MyCardIt";
 
     @Override
+    protected void onSaveInstanceState(Bundle outstate)
+    {
+        super.onSaveInstanceState(outstate);
+        if(firstNameString != null)
+        {
+            outstate.putString(FIRST_NAME,firstNameString);
+        }
+        if(lastNameString != null)
+        {
+            outstate.putString(LAST_NAME,lastNameString);
+        }
+        if(mCurrentPhotoPath != null)
+        {
+            outstate.putString(FRONT_PHOTO_PATH,mCurrentPhotoPath);
+        }
+        if(backCardPhotoPath != null)
+        {
+            outstate.putString(BACK_PHOTO_PATH,backCardPhotoPath);
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         myCard = null;
-        firstNameString = null;
-        lastNameString = null;
         mImageBitmap = null;
-        mCurrentPhotoPath = null;
         backCardBitmap = null;
-        backCardPhotoPath = null;
         setContentView(R.layout.activity_add_contact);
         addNewContactButton = (Button) findViewById(R.id.add_new_contact_button);
 
