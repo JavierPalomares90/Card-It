@@ -104,6 +104,14 @@ public class AddContactActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null)
+        {
+            firstNameString = savedInstanceState.getString(FIRST_NAME);
+            lastNameString = savedInstanceState.getString(LAST_NAME);
+            mCurrentPhotoPath = savedInstanceState.getString(FRONT_PHOTO_PATH);
+            backCardPhotoPath = savedInstanceState.getString(BACK_PHOTO_PATH);
+        }
+
         myCard = null;
         mImageBitmap = null;
         backCardBitmap = null;
@@ -177,11 +185,39 @@ public class AddContactActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(firstNameString != null)
+        {
+            firstName.setText(firstNameString);
+        }
+        if(lastNameString != null)
+        {
+            lastName.setText(lastNameString);
+        }
+        if(mCurrentPhotoPath != null)
+        {
+            isFront = false;
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            cardView.setImageBitmap(bitmap);
+            addImage();
+        }
+        else if(backCardPhotoPath != null)
+        {
+            isFront = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(backCardPhotoPath);
+            cardView.setImageBitmap(bitmap);
+            addImage();
+        }
+    }
+
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
         isFront = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("We'll get the front and back of the card!")
+        builder.setMessage("We'll set your card now!")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
