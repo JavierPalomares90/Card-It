@@ -87,11 +87,6 @@ public class MainActivity extends Activity {
         mFloatingActionButton.setOnClickListener(mFabClickListener);
         mFloatingActionButton.setBackground(getResources().getDrawable(R.drawable.button_action_red));
 
-        SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
-        if(!settings.contains(IS_MY_CARD_SET))
-        {
-            setMyCard();
-        }
         gestureDetector = new GestureDetector(MainActivity.this,new GestureListener());
         cardView = (ImageView) findViewById(R.id.imageView);
         cardView.setOnTouchListener(new View.OnTouchListener() {
@@ -309,6 +304,12 @@ public class MainActivity extends Activity {
     public void onResume()
     {
         super.onResume();
+        SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
+        if(!settings.contains(IS_MY_CARD_SET))
+        {
+            setMyCard();
+        }
+
         myCard = getMyCard();
         if (myCard != null)
         {
