@@ -58,8 +58,8 @@ public class MainActivity extends Activity {
     private static int ADD_CONTACT_REQUEST = 2;
     private static int SET_MY_CARD_REQUEST = 3;
     private static String IS_MY_CARD_SET = "isMyCardSet";
-    private static String FIRST_NAME = "firstName";
-    private static String LAST_NAME = "lastName";
+    private static String FIRST_NAME = "";
+    private static String LAST_NAME = "";
     private static String IMG_FILE_PATH = "imgFilePath";
     private static String BACK_IMG_FILE_PATH = "backImgFilePath";
     private static String MY_CARD_PREFERENCES = "MyCardPreferences";
@@ -151,13 +151,6 @@ public class MainActivity extends Activity {
                         // if this button is clicked, close
                         // current activity
                         formMyCard();
-                    }
-                })
-                .setNegativeButton("Cancel",new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, just close
-                        // the dialog box and do nothing
-                        dialog.cancel();
                     }
                 });
 
