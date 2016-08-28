@@ -1,14 +1,10 @@
 package cardit.palomares.javier.com.mycardit;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,10 +14,7 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Display;
-import android.view.GestureDetector;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,15 +25,12 @@ import android.content.DialogInterface;
 
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 
-import java.io.FileNotFoundException;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.ArrayList;
+
 import cardit.palomares.javier.com.mycardit.card.Card;
 
 import eu.janmuller.android.simplecropimage.CropImage;
@@ -70,15 +60,17 @@ public class AddContactActivity extends Activity {
     private static final String LAST_NAME = "lastName";
     private static final String FRONT_PHOTO_PATH = "frontPhotoPath";
     private static final String BACK_PHOTO_PATH = "backPhotoPath";
-    private static final String SELECT_FRONT = "Select the front of the card";
-    private static final String SELECT_BACK = "Select the back of the card";
+    private static final String SELECT_FRONT = "We'll now upload the front of the card";
+    private static final String SELECT_BACK = "We'll now upload the back of the card";
+    private static final String ADD_BACK_CARD = "addBackCard";
+    private static final String IS_FRONT = "isFront";
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath = null;
     private Bitmap backCardBitmap;
     private String backCardPhotoPath = null;
     private File      mFileTemp;
     private boolean isFront;
-    private boolean showDiag = false;
+    private boolean addBackCardOnResume = false;
     private static String TAG = "MyCardIt";
 
     @Override
@@ -101,7 +93,8 @@ public class AddContactActivity extends Activity {
         {
             outstate.putString(BACK_PHOTO_PATH,backCardPhotoPath);
         }
-
+        outstate.putBoolean(ADD_BACK_CARD,addBackCardOnResume);
+        //outstate.putBoolean(IS_FRONT,isFront);
     }
 
     @Override
@@ -113,6 +106,8 @@ public class AddContactActivity extends Activity {
             lastNameString = savedInstanceState.getString(LAST_NAME);
             mCurrentPhotoPath = savedInstanceState.getString(FRONT_PHOTO_PATH);
             backCardPhotoPath = savedInstanceState.getString(BACK_PHOTO_PATH);
+            addBackCardOnResume = savedInstanceState.getBoolean(ADD_BACK_CARD);
+            //isFront = savedInstanceState.getBoolean(IS_FRONT);
         }
 
         myCard = null;
@@ -202,35 +197,56 @@ public class AddContactActivity extends Activity {
         }
         if(mCurrentPhotoPath != null)
         {
-            //isFront = false;
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
             cardView.setImageBitmap(bitmap);
-            //addImage();
+            if(addBackCardOnResume) {
+                //addImage(SELECT_BACK);
+            }
         }
         else if(backCardPhotoPath != null)
         {
-            //isFront = true;
             Bitmap bitmap = BitmapFactory.decodeFile(backCardPhotoPath);
             cardView.setImageBitmap(bitmap);
-            //addImage();
         }
+
     }
 
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
         isFront = true;
-        showDiag = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We'll set your card now!")
                 .setCancelable(false)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // add front image
-                        addImage(SELECT_FRONT);
+                        addCardFrontOrBack();
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void addCardFrontOrBack()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+        alertDialogBuilder.setTitle("We'll need the front and back of the card");
+        String[] items = {"Upload the front of card","Upload the back of card"};
+        alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which)
+            {
+                if(which == 0)
+                {
+                    addImage(SELECT_FRONT);
+                }
+                else if (which == 1)
+                {
+                    addImage(SELECT_BACK);
+                }
+            }
+        }).create().show();
     }
 
     private void addImage(String title)
@@ -241,7 +257,7 @@ public class AddContactActivity extends Activity {
         alertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                showDiag = false;
+                addBackCardOnResume = false;
             }
         });
         String[] items = {"Capture card","Attach card"};
@@ -366,7 +382,13 @@ public class AddContactActivity extends Activity {
                 isFront = !isFront;
                 // add back Image
                 if (!isFront) {
+                    addBackCardOnResume = true;
                     addImage(SELECT_BACK);
+                }
+                // this is the back image
+                else
+                {
+                    addBackCardOnResume = false;
                 }
                 if (mImageBitmap!= null && backCardBitmap != null)
                 {
