@@ -70,6 +70,8 @@ public class AddContactActivity extends Activity {
     private static final String LAST_NAME = "lastName";
     private static final String FRONT_PHOTO_PATH = "frontPhotoPath";
     private static final String BACK_PHOTO_PATH = "backPhotoPath";
+    private static final String SELECT_FRONT = "Select the front of the card";
+    private static final String SELECT_BACK = "Select the back of the card";
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath = null;
     private Bitmap backCardBitmap;
@@ -200,17 +202,17 @@ public class AddContactActivity extends Activity {
         }
         if(mCurrentPhotoPath != null)
         {
-            isFront = false;
+            //isFront = false;
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
             cardView.setImageBitmap(bitmap);
-            addImage();
+            //addImage();
         }
         else if(backCardPhotoPath != null)
         {
-            isFront = true;
+            //isFront = true;
             Bitmap bitmap = BitmapFactory.decodeFile(backCardPhotoPath);
             cardView.setImageBitmap(bitmap);
-            addImage();
+            //addImage();
         }
     }
 
@@ -224,24 +226,17 @@ public class AddContactActivity extends Activity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // add front image
-                        addImage();
+                        addImage(SELECT_FRONT);
                     }
                 });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void addImage()
+    private void addImage(String title)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
-        String title = "";
-        if (isFront){
-            title = "Select the front of the card";
-        }else
-        {
-            title = "Select the back of the card";
-        }
         alertDialogBuilder.setTitle(title);
         alertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
@@ -371,7 +366,7 @@ public class AddContactActivity extends Activity {
                 isFront = !isFront;
                 // add back Image
                 if (!isFront) {
-                    addImage();
+                    addImage(SELECT_BACK);
                 }
                 if (mImageBitmap!= null && backCardBitmap != null)
                 {
