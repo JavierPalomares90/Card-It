@@ -76,6 +76,7 @@ public class AddContactActivity extends Activity {
     private String backCardPhotoPath = null;
     private File      mFileTemp;
     private boolean isFront;
+    private boolean showDiag = false;
     private static String TAG = "MyCardIt";
 
     @Override
@@ -216,6 +217,7 @@ public class AddContactActivity extends Activity {
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
         isFront = true;
+        showDiag = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We'll set your card now!")
                 .setCancelable(false)
@@ -241,6 +243,12 @@ public class AddContactActivity extends Activity {
             title = "Select the back of the card";
         }
         alertDialogBuilder.setTitle(title);
+        alertDialogBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                showDiag = false;
+            }
+        });
         String[] items = {"Capture card","Attach card"};
         alertDialogBuilder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
