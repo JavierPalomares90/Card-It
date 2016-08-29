@@ -436,7 +436,7 @@ public class AddContactActivity extends Activity {
 
     private void cropAndRotateImage(Uri imgUri)
     {
-
+        Log.d(TAG,"In crop and rotate");
         // create explicit intent
         Intent intent = new Intent(this, CropImage.class);
 
