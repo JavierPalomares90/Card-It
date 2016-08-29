@@ -239,10 +239,12 @@ public class AddContactActivity extends Activity {
             {
                 if(which == 0)
                 {
+                    isFront = true;
                     addImage(SELECT_FRONT);
                 }
                 else if (which == 1)
                 {
+                    isFront = false;
                     addImage(SELECT_BACK);
                 }
             }
@@ -376,19 +378,21 @@ public class AddContactActivity extends Activity {
                 //String savePath = savePhoto(selectedBitmap);
                 if(isFront) {
                     mImageBitmap = bitmap;
+                    mCurrentPhotoPath = mFileTemp.getPath();
                 }else{
                     backCardBitmap = bitmap;
+                    backCardPhotoPath = mFileTemp.getPath();
                 }
-                isFront = !isFront;
-                // add back Image
-                if (!isFront) {
-                    addBackCardOnResume = true;
-                    addImage(SELECT_BACK);
-                }
-                // this is the back image
-                else
+                if (mImageBitmap == null)
                 {
-                    addBackCardOnResume = false;
+                    isFront = true;
+                    // add the front card
+                    addImage(SELECT_FRONT);
+                }
+                else if (backCardBitmap == null)
+                {
+                    isFront = false;
+                    addImage(SELECT_BACK);
                 }
                 if (mImageBitmap!= null && backCardBitmap != null)
                 {
