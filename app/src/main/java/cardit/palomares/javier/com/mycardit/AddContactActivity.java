@@ -63,7 +63,6 @@ public class AddContactActivity extends Activity {
     private static final String SELECT_FRONT = "We'll now upload the front of the card";
     private static final String SELECT_BACK = "We'll now upload the back of the card";
     private static final String ADD_BACK_CARD = "addBackCard";
-    private static final String IS_FRONT = "isFront";
     private Bitmap mImageBitmap;
     private String mCurrentPhotoPath = null;
     private Bitmap backCardBitmap;
@@ -71,6 +70,7 @@ public class AddContactActivity extends Activity {
     private File      mFileTemp;
     private boolean isFront;
     private boolean addBackCardOnResume = false;
+    private boolean showDiag = false;
     private static String TAG = "MyCardIt";
 
     @Override
@@ -94,6 +94,7 @@ public class AddContactActivity extends Activity {
             outstate.putString(BACK_PHOTO_PATH,backCardPhotoPath);
         }
         outstate.putBoolean(ADD_BACK_CARD,addBackCardOnResume);
+        outstate.putBoolean("showDiag",showDiag);
         //outstate.putBoolean(IS_FRONT,isFront);
     }
 
@@ -107,7 +108,7 @@ public class AddContactActivity extends Activity {
             mCurrentPhotoPath = savedInstanceState.getString(FRONT_PHOTO_PATH);
             backCardPhotoPath = savedInstanceState.getString(BACK_PHOTO_PATH);
             addBackCardOnResume = savedInstanceState.getBoolean(ADD_BACK_CARD);
-            //isFront = savedInstanceState.getBoolean(IS_FRONT);
+            showDiag = savedInstanceState.getBoolean("showDiag");
         }
 
         myCard = null;
@@ -195,25 +196,47 @@ public class AddContactActivity extends Activity {
         {
             lastName.setText(lastNameString);
         }
-        if(mCurrentPhotoPath != null)
+        boolean isFrontCardSet = mCurrentPhotoPath != null;
+        boolean isBackCardSet = backCardPhotoPath != null;
+        if(isFrontCardSet)
         {
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            cardView.setImageBitmap(bitmap);
-            if(addBackCardOnResume) {
-                //addImage(SELECT_BACK);
-            }
+            mImageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
         }
-        else if(backCardPhotoPath != null)
+        if (isBackCardSet)
         {
-            Bitmap bitmap = BitmapFactory.decodeFile(backCardPhotoPath);
-            cardView.setImageBitmap(bitmap);
+            backCardBitmap = BitmapFactory.decodeFile(backCardPhotoPath);
         }
 
+        if (showDiag) {
+            if (firstNameString != null && lastNameString != null) {
+                if (!isFrontCardSet && !isBackCardSet) {
+                    snapCard();
+                } else if (!isFrontCardSet)
+                {
+                    isFront = true;
+                    if(isBackCardSet)
+                    {
+                        cardView.setImageBitmap(backCardBitmap);
+                    }
+                    addImage(SELECT_FRONT);
+                }
+                else if (!isBackCardSet)
+                {
+                    isFront = false;
+                    if(isFrontCardSet)
+                    {
+                        cardView.setImageBitmap(mImageBitmap);
+                    }
+                    addImage(SELECT_BACK);
+                }
+            }
+        }
     }
 
     private void snapCard(){
         Log.d(TAG,"In Snap Card");
         isFront = true;
+        showDiag = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("We'll set your card now!")
                 .setCancelable(false)
@@ -285,12 +308,14 @@ public class AddContactActivity extends Activity {
                     }
                     if (cameraIntent.resolveActivity(getPackageManager()) != null) {
 
+                        showDiag = false;
                         startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE);
                     }
                 }
                 // Upload from files
                 else if (which == 1)
                 {
+                    showDiag = false;
                     startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
                 }
             }
@@ -325,6 +350,7 @@ public class AddContactActivity extends Activity {
         // TODO: If save image from gallery to storage prior to rotating and cropping
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d(TAG, "Got a requestCode REQUEST_IMAGE_CAPTURE");
+            showDiag = false;
             if (data == null)
             {
                 imgUri = selectedImageUri;
@@ -348,6 +374,7 @@ public class AddContactActivity extends Activity {
         else if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK)
         {
             Log.d(TAG, " Got a requestCode GET_FROM_GALLERY");
+            showDiag = false;
             Uri img = data.getData();
             if (img == null)
             {
@@ -360,6 +387,7 @@ public class AddContactActivity extends Activity {
         }
         else if (requestCode == PIC_CROP && resultCode == Activity.RESULT_OK)
         {
+            showDiag = true;
             if (data != null) {
 
                 String path = data.getStringExtra(CropImage.IMAGE_PATH);
@@ -383,6 +411,7 @@ public class AddContactActivity extends Activity {
                     backCardBitmap = bitmap;
                     backCardPhotoPath = mFileTemp.getPath();
                 }
+                /*
                 if (mImageBitmap == null)
                 {
                     isFront = true;
@@ -394,6 +423,7 @@ public class AddContactActivity extends Activity {
                     isFront = false;
                     addImage(SELECT_BACK);
                 }
+                */
                 if (mImageBitmap!= null && backCardBitmap != null)
                 {
                     addNewContactButton.setClickable(true);
