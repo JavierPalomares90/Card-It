@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="38.532279"
-     inkscape:cy="35.55958"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="28.197707"
+     inkscape:cy="39.785568"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -81,5 +81,20 @@
        d="m 56.943801,1017.3621 29.843495,0"
        id="path6030"
        inkscape:connector-curvature="0" />
+    <g
+       transform="matrix(2,0,0,2,24,950.32313)"
+       id="g6651">
+      <circle
+         style="fill:#f44336"
+         id="circle6088"
+         r="2.1800001"
+         cy="20.236002"
+         cx="12" />
+      <path
+         style="fill:#f44336"
+         inkscape:connector-curvature="0"
+         id="path6090"
+         d="m 1,12.331457 2.0011122,2.001113 c 4.9709607,-4.9709612 13.0319778,-4.9709611 18.0029388,0 l 2.001112,-2.001112 C 16.931116,6.2574099 7.0740474,6.25741 1,12.331457 Z m 4.0022242,4.002224 2.0011126,2.001113 c 2.7577161,-2.757717 7.2407732,-2.757716 9.9984892,-10e-7 l 2.001113,-2.001111 c -3.867875,-3.867875 -10.1328406,-3.867875 -14.0007148,-1e-6 z" />
+    </g>
   </g>
 </svg>
