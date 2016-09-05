@@ -429,30 +429,7 @@ public class AddContactActivity extends Activity {
             }
         }
     }
-
-    /*
-    private void cropAndRotateImage(Uri imgUri)
-    {
-        Log.d(TAG,"In crop and rotate");
-        // create explicit intent
-        Intent intent = new Intent(this, CropImage.class);
-
-        // tell CropImage activity to look for image to crop
-        String filePath = imgUri.getPath();
-        intent.putExtra(CropImage.IMAGE_PATH, filePath);
-        mFileTemp = new File(filePath);
-
-        // allow CropImage activity to rescale image
-        intent.putExtra(CropImage.SCALE, true);
-
-        // if the aspect ratio is fixed to ratio 7/4
-        intent.putExtra(CropImage.ASPECT_X, ASPECT_X);
-        intent.putExtra(CropImage.ASPECT_Y, ASPECT_Y);
-        intent.putExtra(CropImage.OUTPUT_X,CARD_VIEW_WIDTH);
-        intent.putExtra(CropImage.OUTPUT_Y,CARD_VIEW_HEIGHT);
-        startActivityForResult(intent, PIC_CROP);
-    }
-    */
+    
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
