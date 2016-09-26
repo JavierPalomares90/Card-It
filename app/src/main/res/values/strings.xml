@@ -7,7 +7,7 @@
         <item> Mercury</item>
         <item>Venus</item>
     </string-array>
-    <string name="title_activity_add_contact">New Contact</string>
+    <string name="title_activity_add_contact">Creating Card</string>
     <string name="title_activity_view_contact">ViewContactActivity</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
