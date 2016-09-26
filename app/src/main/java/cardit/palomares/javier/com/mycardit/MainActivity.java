@@ -136,10 +136,10 @@ public class MainActivity extends Activity {
     private void setMyCard(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
-        alertDialogBuilder.setTitle("Set your card");
+        //alertDialogBuilder.setTitle("Set your card");
         // set dialog message
         alertDialogBuilder
-                .setMessage("Hit enter to set your card")
+                .setMessage("Welcome to AirCard, a minimalist app designed to manage your business cards of people you interact with, without cluttering your contact list or your wallet.\n We'll begin by creating your card.")
                 .setCancelable(false)
                 .setPositiveButton("Enter",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
