@@ -136,7 +136,6 @@ public class MainActivity extends Activity {
     private void setMyCard(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 this);
-        //alertDialogBuilder.setTitle("Set your card");
         // set dialog message
         alertDialogBuilder
                 .setMessage("Welcome to AirCard, a minimalist app designed to manage your business cards of people you interact with, without cluttering your contact list or your wallet.\n We'll begin by creating your card.")
@@ -297,6 +296,7 @@ public class MainActivity extends Activity {
             editor.putString(BACK_IMG_FILE_PATH,backCardImgPath);
             editor.putBoolean(IS_MY_CARD_SET, true);
             editor.commit();
+            Log.d(TAG,"Commiting my card");
         }
     }
 
@@ -307,6 +307,7 @@ public class MainActivity extends Activity {
         SharedPreferences settings = this.getSharedPreferences(MY_CARD_PREFERENCES,0);
         if(!settings.contains(IS_MY_CARD_SET))
         {
+            Log.d(TAG,"Creating card");
             setMyCard();
         }
 

@@ -83,7 +83,7 @@ public class NFCTransferActivity extends Activity implements CreateNdefMessageCa
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NFCTransferActivity.this);
         alertDialogBuilder.setTitle("Transferring card");
         // set dialog message
-        alertDialogBuilder.setMessage("Tap your phones to transfer your card").setCancelable(false);
+        alertDialogBuilder.setMessage("AirCard will now transfer the business card using NFC. Tap your phones' back to transfer.").setCancelable(false);
         alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
