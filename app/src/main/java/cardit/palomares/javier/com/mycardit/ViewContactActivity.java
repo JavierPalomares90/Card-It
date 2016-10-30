@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.graphics.BitmapFactory;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ public class ViewContactActivity extends Activity {
     private boolean isFront;
     private GestureDetector gestureDetector;
     private boolean fitToScreen;
+    private Button flipCardButton;
 
 
     @Override
@@ -54,6 +56,25 @@ public class ViewContactActivity extends Activity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return gestureDetector.onTouchEvent(event);
+            }
+        });
+        flipCardButton = (Button) findViewById(R.id.flip_card_button);
+        flipCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap;
+                if (isFront) {
+                    bitmap = currCard.getBackCardImg();
+                    flipCardButton.setBackgroundResource(R.drawable.ic_flip_to_front_black_48dp);
+                } else {
+                    bitmap = currCard.getFrontCardImg();
+                    flipCardButton.setBackgroundResource(R.drawable.ic_flip_to_back_black_48dp);
+                }
+                isFront = !isFront;
+
+                if (bitmap != null) {
+                    cardView.setImageBitmap(bitmap);
+                }
             }
         });
     }
