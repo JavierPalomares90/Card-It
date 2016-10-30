@@ -24,7 +24,7 @@
         android:layout_height="20dp"
         android:background="@drawable/ic_flip_to_back_black_48dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentLeft="true"/>
 
 
 </RelativeLayout>

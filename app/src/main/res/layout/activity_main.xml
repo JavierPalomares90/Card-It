@@ -15,6 +15,15 @@
             android:id="@+id/imageView"
             android:scaleType="fitCenter"
             android:layout_gravity="center" />
+        <Button
+            android:layout_width="20dp"
+            android:id="@+id/flip_card_button"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_flip_to_back_black_48dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="bottom" />
+
 
 
     </FrameLayout>

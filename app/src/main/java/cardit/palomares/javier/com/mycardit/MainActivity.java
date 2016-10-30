@@ -65,6 +65,7 @@ public class MainActivity extends Activity {
     private static String MY_CARD_PREFERENCES = "MyCardPreferences";
     private static String IMG_FILE_NAME = "imgFileName";
     private static String BACK_IMG_FILE_NAME = "backImgFileName";
+    private Button flipCardButton;
     private GestureDetector gestureDetector;
     private View.OnClickListener mFabClickListener = new View.OnClickListener() {
         @Override
@@ -80,6 +81,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         final ImageView plusIcon = new ImageView(this);
+        flipCardButton = (Button) findViewById(R.id.flip_card_button);
+        flipCardButton.setVisibility(View.INVISIBLE);
+        flipCardButton.setClickable(false);
         plusIcon.setImageDrawable(getResources().getDrawable(R.drawable.ic_add_white_24dp));
         mFloatingActionButton = new FloatingActionButton.Builder(this).setContentView(plusIcon)
                 .build();
@@ -128,6 +132,26 @@ public class MainActivity extends Activity {
         String lastName = settings.getString(LAST_NAME,LAST_NAME);
         String imgPath = settings.getString(IMG_FILE_PATH,getApplicationInfo().dataDir);
         String backImgPath = settings.getString(BACK_IMG_FILE_PATH,getApplicationInfo().dataDir);
+        flipCardButton.setClickable(true);
+        flipCardButton.setVisibility(View.VISIBLE);
+        flipCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap bitmap;
+                if (isFront) {
+                    bitmap = myCard.getBackCardImg();
+                    flipCardButton.setBackgroundResource(R.drawable.ic_flip_to_front_black_48dp);
+                } else {
+                    bitmap = myCard.getFrontCardImg();
+                    flipCardButton.setBackgroundResource(R.drawable.ic_flip_to_back_black_48dp);
+                }
+                isFront = !isFront;
+
+                if (bitmap != null) {
+                    cardView.setImageBitmap(bitmap);
+                }
+            }
+        });
 
         result = new Card(firstName,lastName,BitmapFactory.decodeFile(imgPath),imgPath,BitmapFactory.decodeFile(backImgPath),backImgPath);
         return result;
